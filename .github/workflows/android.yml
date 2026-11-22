@@ -2,6 +2,7 @@
 # 仕様：
 #  - mainへのpush（public/ などの変更時）または手動実行で、public/ をCapacitorでAndroidアプリ化してAPKを作る
 #  - 横画面固定（sensorLandscape）、全画面表示（MainActivityを差し替え）
+#  - アプリアイコンは android-overrides/res の画像（濃紺の背景＋自機LOLLIPOP）に差し替える
 #  - 署名は固定のデバッグ鍵（android-overrides/debug.keystore）で行い、上書きインストールできるようにする
 #  - 完成したAPKはReleases「android-latest」に固定ファイル名 fantaryon.apk で公開する（毎回置き換え）
 #  - Android SDKはランナーに標準搭載のものを使う（setup-androidは使わない：ライセンス取得で失敗するため）
@@ -49,6 +50,7 @@ jobs:
         run: |
           sed -i 's|android:name=".MainActivity"|android:name=".MainActivity"\n            android:screenOrientation="sensorLandscape"|' android/app/src/main/AndroidManifest.xml
           cp android-overrides/MainActivity.java android/app/src/main/java/net/otkt/fantaryon/MainActivity.java
+          cp -r android-overrides/res/* android/app/src/main/res/
           mkdir -p ~/.android
           cp android-overrides/debug.keystore ~/.android/debug.keystore
 
