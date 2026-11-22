@@ -1,0 +1,9 @@
+// FANTARYON — Cloudflare Workers（静的アセット配信）設定
+// public/ フォルダの中身をそのまま配信する。ビルド処理なし。
+{
+  "name": "fantaryon",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./public"
+  }
+}
