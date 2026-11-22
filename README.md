@@ -1,7 +1,8 @@
 # FANTARYON（ファンタリオン）
 
 ottoky studio の横スクロールシューティング（Fantasy × Beyond × Orion）。
-Music: ottoky studio feat. Romeo Hijo
+- ゲーム制作：ottoky studio
+- 音楽：Romeo Hijo（Delusion sound track 01）
 
 ## 構成
 
@@ -22,4 +23,8 @@ Music: ottoky studio feat. Romeo Hijo
 
 ## 現在の版
 
-mock-0.5：ロゴ → オープニング → タイトル → 出撃前会話 → 1面 → 1面ボス → 会話 → クリア画面
+ver 0.6：全3面（地球周回軌道／月軌道／外宇宙）＋ボス3体、通常・真エンディング、スタッフロール
+
+- ライフ制：1機ごとにライフ2、残機3
+- 真エンディング条件：一度もコンティニューせずにラスボスのコアへ突入する
+- ステージセレクト：デバッグ用として全ステージ・全ボス・両エンディングを選択可能
