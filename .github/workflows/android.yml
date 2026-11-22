@@ -4,6 +4,7 @@
 #  - 横画面固定（sensorLandscape）、全画面表示（MainActivityを差し替え）
 #  - 署名は固定のデバッグ鍵（android-overrides/debug.keystore）で行い、上書きインストールできるようにする
 #  - 完成したAPKはReleases「android-latest」に固定ファイル名 fantaryon.apk で公開する（毎回置き換え）
+#  - Android SDKはランナーに標準搭載のものを使う（setup-androidは使わない：ライセンス取得で失敗するため）
 name: Android APK
 
 on:
@@ -35,7 +36,8 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - uses: android-actions/setup-android@v3
+      - name: Android SDKライセンスの同意（標準搭載SDK）
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
 
       - name: 依存パッケージのインストール
         run: npm install
