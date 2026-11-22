@@ -10,12 +10,22 @@ ottoky studio の横スクロールシューティング（Fantasy × Beyond × 
 |---|---|
 | `public/index.html` | ゲーム本体（1ファイル完結。画像・BGMを埋め込み済み） |
 | `wrangler.jsonc` | Cloudflare Workers の静的アセット配信設定 |
+| `package.json` / `capacitor.config.json` | Android版（Capacitor）の設定 |
+| `android-overrides/` | Android版の差し替えファイル（全画面化のMainActivity、固定のデバッグ署名鍵） |
+| `.github/workflows/android.yml` | APKの自動ビルドとReleasesへの公開 |
 
 ## 公開（Cloudflare Workers）
 
 - ビルドコマンド：なし
 - デプロイコマンド：`npx wrangler deploy`
 - 公開URL：`https://fantaryon.<アカウントのサブドメイン>.workers.dev`
+
+## Android版（APK）
+
+- mainへpushすると GitHub Actions が自動でAPKをビルドし、Releases に公開する
+- ダウンロードURL（固定）：https://github.com/otokitayuichi/FANTARYON/releases/download/android-latest/fantaryon.apk
+- 手動で作り直す場合：Actions →「Android APK」→「Run workflow」
+- 署名はデバッグ鍵（ストア公開用ではない）。Google Playに出す場合は本番用の署名鍵を別途用意する
 
 ## 更新方法
 

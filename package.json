@@ -1,0 +1,11 @@
+{
+  "name": "fantaryon",
+  "private": true,
+  "version": "0.7.0",
+  "description": "FANTARYON - ottoky studio（Android版はCapacitorでpublic/をアプリ化）",
+  "devDependencies": {
+    "@capacitor/android": "8.6.2",
+    "@capacitor/cli": "8.6.2",
+    "@capacitor/core": "8.6.2"
+  }
+}

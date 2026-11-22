@@ -1,0 +1,8 @@
+{
+  "appId": "net.otkt.fantaryon",
+  "appName": "FANTARYON",
+  "webDir": "public",
+  "android": {
+    "backgroundColor": "#050814"
+  }
+}

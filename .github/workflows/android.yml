@@ -1,0 +1,78 @@
+# FANTARYON Android APK 自動ビルド
+# 仕様：
+#  - mainへのpush（public/ などの変更時）または手動実行で、public/ をCapacitorでAndroidアプリ化してAPKを作る
+#  - 横画面固定（sensorLandscape）、全画面表示（MainActivityを差し替え）
+#  - 署名は固定のデバッグ鍵（android-overrides/debug.keystore）で行い、上書きインストールできるようにする
+#  - 完成したAPKはReleases「android-latest」に固定ファイル名 fantaryon.apk で公開する（毎回置き換え）
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/**'
+      - 'capacitor.config.json'
+      - 'package.json'
+      - 'android-overrides/**'
+      - '.github/workflows/android.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: android-actions/setup-android@v3
+
+      - name: 依存パッケージのインストール
+        run: npm install
+
+      - name: Androidプロジェクトの生成
+        run: npx cap add android
+
+      - name: 横画面固定・全画面・署名鍵の設定
+        run: |
+          sed -i 's|android:name=".MainActivity"|android:name=".MainActivity"\n            android:screenOrientation="sensorLandscape"|' android/app/src/main/AndroidManifest.xml
+          cp android-overrides/MainActivity.java android/app/src/main/java/net/otkt/fantaryon/MainActivity.java
+          mkdir -p ~/.android
+          cp android-overrides/debug.keystore ~/.android/debug.keystore
+
+      - name: Webファイルの同期
+        run: npx cap sync android
+
+      - name: APKのビルド
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: APKの取り出し
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk fantaryon.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fantaryon-apk
+          path: fantaryon.apk
+
+      - name: Releasesに公開（固定URL）
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete android-latest --yes --cleanup-tag || true
+          gh release create android-latest fantaryon.apk \
+            --title "FANTARYON Android（最新ビルド）" \
+            --notes "mainブランチの最新版から自動ビルドしたAPKです。" \
+            --latest
