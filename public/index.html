@@ -74,7 +74,7 @@
  ポーズ    : Esc/P または右上のボタンで一時停止。「ゲームを再開」「タイトルへ戻る」を選べる。
  操作      : スマホ  左側＝アナログスティック、右側＝長押しでショット、BOMB／換装ボタン、右上＝一時停止
              キーボード 矢印/WASD＝移動、Shift＝低速、Z/Space/J＝ショット、X/K＝ボム、C＝換装（3面）、
-                        Enter/Z＝決定・会話送り、S＝会話スキップ、Esc/P＝一時停止
+                        Enter/Z＝決定・会話送り、S＝会話スキップ、Q＝チュートリアルスキップ（SはWASDの下移動と重なるため）、Esc/P＝一時停止
              マウス  クリック長押し＝ショット
              ゲームパッド 十字キー/左スティック＝移動（スティックはアナログ）、A/RT＝ショット・決定、B＝ボム・戻る、
                         X/Y＝換装（3面）、LB/RB/LT＝低速、BACK＝会話スキップ、START＝一時停止。
@@ -217,7 +217,7 @@ addEventListener('keyup',e=>{keys[e.code]=false;});
 // LB/RB/LT＝低速、BACK＝会話スキップ、START＝一時停止。被弾とボムで振動（対応パッド・ブラウザのみ）。
 let usePad=false;const padAxis={x:0,y:0,on:false};const padPrev={};
 const PAD_MAP=[[0,['KeyZ']],[1,['KeyX','Backspace']],[2,['KeyC']],[3,['KeyC']],[4,['ShiftLeft','PadLB']],[5,['ShiftLeft','PadRB']],[6,['ShiftLeft']],[7,['KeyZ']],
-  [8,['KeyS']],[9,['Escape']],[12,['ArrowUp']],[13,['ArrowDown']],[14,['ArrowLeft']],[15,['ArrowRight']]];
+  [8,['KeyS','PadBack']],[9,['Escape']],[12,['ArrowUp']],[13,['ArrowDown']],[14,['ArrowLeft']],[15,['ArrowRight']]];
 function pollPad(){if(!navigator.getGamepads)return;let gps;try{gps=navigator.getGamepads();}catch(_){return;}
   const now={};let any=false;padAxis.on=false;
   for(const gp of gps){if(!gp||!gp.connected)continue;
@@ -469,7 +469,7 @@ function tutNextStep(){tut.step++;tut.t=0;sfx('decide');
   if(tut.step===1){for(const y of [48,98,148])spawn('target',380,y);}  // 会話ウィンドウ（PH-64より下）に重ならない高さ
   if(tut.step>=TUT_TEXT.length){tutDone=true;sv('fantaryon_tut','1');const n=tut.next;tut=null;resetField();n();}}
 function updateTutorial(dt){tut.t+=dt;bgScroll+=dt*0.6;
-  if(pressed.KeyS||pressed.Escape||tapQueue.some(t=>{const g=toGame(t.x,t.y);return g.x>W-70&&g.y<30;})){tut.step=TUT_TEXT.length-1;tutNextStep();return;}
+  if(pressed.KeyQ||pressed.PadBack||tapQueue.some(t=>{const g=toGame(t.x,t.y);return g.x>W-70&&g.y<30;})){tut.step=TUT_TEXT.length-1;tutNextStep();return;}
   updatePlayer(dt);P.inv=1e9;tut.moved+=Math.hypot(P.x-tut.lx,P.y-tut.ly);tut.lx=P.x;tut.ly=P.y;
   updateEnemies(dt);updateShots(dt);updateBomb(dt);
   for(const p of parts){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;}parts=parts.filter(p=>p.t<p.life);
@@ -596,7 +596,7 @@ function updatePlayer(dt){
   if(stick.id!==null){mx=stick.dx;my=stick.dy;}
   if(padAxis.on){mx=padAxis.x;my=padAxis.y;}
   const spd=(keys.ShiftLeft||keys.ShiftRight)?65:130;
-  P.x=Math.max(16,Math.min(tut?320:W-18,P.x+mx*spd*dt));  // チュートリアル中は標的（x=380）より前に出ないP.y=Math.max(10,Math.min(PH-10,P.y+my*spd*dt));
+  P.x=Math.max(16,Math.min(tut?320:W-18,P.x+mx*spd*dt));P.y=Math.max(10,Math.min(PH-10,P.y+my*spd*dt));  // チュートリアル中は標的（x=380）より前に出ない
   P.inv=Math.max(0,P.inv-dt);P.cool-=dt;
   // オプション（追従）
   for(let i=0;i<2;i++){const tx=P.x-6,ty=P.y+(i?15:-15);orbs[i].x+=(tx-orbs[i].x)*Math.min(1,dt*10);orbs[i].y+=(ty-orbs[i].y)*Math.min(1,dt*10);}
@@ -1219,7 +1219,7 @@ function drawCredits(){ui();drawSpace(ctx,bgScroll,endType==='true'?'space':'spa
 function drawTutorial(){
   const text=TUT_TEXT[Math.min(tut.step,TUT_TEXT.length-1)]();
   txtS('TRAINING　'+(Math.min(tut.step,TUT_TEXT.length-1)+1)+' / '+TUT_TEXT.length,10,22,11,'#8affc0');
-  box(W-62,8,54,20,'rgba(8,12,40,0.8)','#8a94c4');txt(isTouch?'SKIP':(usePad?'BACK:SKIP':'S:SKIP'),W-35,22,usePad?8:10,'#c8d0ec','center');
+  box(W-62,8,54,20,'rgba(8,12,40,0.8)','#8a94c4');txt(isTouch?'SKIP':(usePad?'BACK:SKIP':'Q:SKIP'),W-35,22,usePad?8:10,'#c8d0ec','center');
   box(8,PH-64,W-16,58,'rgba(6,20,16,0.92)','#8affc0');portrait('sgt',12,PH-60,50);txt('ゴンダ軍曹',68,PH-48,10,CHARS.sgt.col);
   text.split('\n').forEach((l,i)=>txt(l,68,PH-32+i*15,11,'#e8f2ea'));
   if(tut.step>=3&&Math.floor(gT*2)%2)txt(isTouch?'タップで次へ ▼':(usePad?'A で次へ ▼':'Enter／Z で次へ ▼'),W-16,PH-10,9,'#f0c86a','right');
