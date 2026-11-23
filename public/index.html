@@ -8,7 +8,9 @@
  音楽      : Romeo Hijo（Delusion sound track 01）
  スタッフ  : 制作スタジオ ottoky studio／ゲーム制作 おとっきー／シナリオ おとっきー・Romeo Hijo／
              デザイン おとっきー／キャラクター Romeo Hijo／音楽 Romeo Hijo
- 版        : 0.9.4（2026-11-23）全ボスに必殺技（技名カットイン）、ANOTHER 1のボスを機械で補修されたマザーベリーに変更、
+ 版        : 0.9.5（2026-11-23）ボスの必殺技を各2つ以上に（追加分は予告線つきの直線レーザー）、
+             ボーダーシェルの護衛（自機の影）を真珠のファンネルに変更
+             0.9.4（2026-11-23）全ボスに必殺技（技名カットイン）、ANOTHER 1のボスを機械で補修されたマザーベリーに変更、
              ゲームスタートは1面から、ステージ選択などは隠しデバッグメニュー（630）へ移動、チュートリアルの標的位置を修正
              0.9.3（2026-11-23）ゲームパッド対応（標準配置・アナログ移動・振動・操作説明の切り替え）
              0.9.2（2026-11-23）オープニングを作り直し（警報をじわじわ、ドラグナー風のカットイン、3人並び）／Androidのバージョン番号を自動採番
@@ -39,10 +41,23 @@
              2面 月軌道（Spaceship -Hazelnut-）地形あり／ボス 境界体ボーダーシェル（貝）（Border Line）
              3面 外宇宙（Outer Zone）／ラスボス 中心核フェイタル（クラゲ）（Fatal Command）
              エンディング（Final Decision）、オープニング・タイトル（Ready）
- ボスの必殺技 : 体力が2/3を切ると最初の必殺技を出し、以後は一定間隔（12〜14秒）で繰り返す。発動時に技名のカットインを表示。
-             1周目 1面「群体放出」追尾弾／2面「真珠螺旋」殻を開いて渦巻き弾／3面「フェイタル・レイ」溜め撃ちビーム
-             2周目 1面「改造キャノン」ビーム＋追尾ミサイル／2面「双螺旋」逆回転の二重渦巻き／3面「ツイン・フェイタルレイ」ビーム2連射
-             もう一人のLOLLIPOP「ミラーバースト」自機そっくりの弾の連射＋全方位弾
+ ボスの必殺技 : 各ボス2つ以上（もう一人のLOLLIPOPは3つ）。体力が2/3を切ると1つ目、1/3を切ると2つ目を出し、
+             以後は順番に一定間隔（12〜14秒）で繰り返す。発動時に技名のカットインを表示。必殺技の間は通常攻撃を止める。
+             1周目 1面「群体放出」追尾弾・「三叉レーザー」3方向レーザー
+                   2面「真珠螺旋」渦巻き弾・「ファンネル・レイ」ファンネル4基が画面端から順に自機を狙うレーザー
+                   3面「フェイタル・レイ」溜め撃ちビーム・「薙ぎ払いレイ」照射したまま上下に振るビーム（画面の半分は安全）
+             2周目 1面「改造キャノン」ビーム＋追尾ミサイル・「五叉レーザー」5方向レーザー2回（2回目は角度をずらす）
+                   2面「双螺旋」逆回転の二重渦巻き・「ファンネル包囲」ファンネル6基の縦横レーザーで格子→各基が自機を狙う
+                   3面「ツイン・フェイタルレイ」ビーム2連射・「交差薙ぎ払い」上と下から振るビーム2本（中央に隙間が残る）
+             もう一人のLOLLIPOP「ミラーバースト」連射＋全方位弾・「ミラーレーザー」太い貫通レーザー2回・「トライレーザー」3方向で挟み込み
+ ボスの弾量 : 0.9.5で通常攻撃・必殺技とも約3〜4割減（必殺技追加で難しくなりすぎたため）。
+ 直線レーザー : 細い予告線（点滅）を0.6〜1.1秒表示してから太い帯を照射。照射中のみ当たり判定。予告の前半だけ自機を追い、後半は向きを固定。
+             色はボスごと（1面ピンク／赤、2面ファンネル薄紫／緑、3面シアン、もう一人のLOLLIPOP橙・黄緑）で自機の金色レーザーと区別する。
+ 1周目の貝ボスの閉じた殻 : 開いた殻を暗くした絵から、殻を閉じた専用の絵（ChatGPT作画）に変更。
+ 2ND MISSIONの見た目 : ザコ7種・ボス1〜3・ファンネルを「パステル×機械の継ぎ接ぎ」の1系統に統一（ChatGPT作画、*_m.png／boss1_x.png／funnel_x.png）。
+             1周目の絵を暗い緑に色替えする方式は廃止。もう一人のLOLLIPOPは自機と同じ見た目のまま。
+ ファンネル : ボーダーシェルが殻を開くたびに補充（1周目2基→体力1/3以下で3基、2周目3基→4基）。ボスの周りを回り、
+             ときどき自機へ細い短いレーザーを撃つ。撃ち落とせる（パールファンネル、300点）。ボス撃破で全て消える。
  ラスボスの溜め撃ち : 中心核フェイタル（1・2周目共通）は約1.6秒の溜め（予告線と光の収束）のあと、
              口から画面左端まで極太ビームを約1.7秒照射する。2周目の鏡の自分も最終段階で使用する。
  弾の見分け : 自機弾＝黄緑の細長い光弾（白い芯＋尾）／レーザー＝金色の太い帯。敵弾＝丸い弾（1・2面ピンク、3面シアン）に黒縁。
@@ -109,10 +124,10 @@ canvas{outline:none;position:fixed;inset:0;width:100vw;height:100vh;height:100dv
 <script>
 {
 // ===== 素材 =====
-const ASSET={logo:"assets/logo.jpg",pop:"assets/pop.png",maj:"assets/maj.png",sgt:"assets/sgt.png",space:"assets/space.jpg",space3:"assets/space3.jpg",earth:"assets/earthtex.jpg",moontex:"assets/moontex.jpg",moon:"assets/moon.png",ship_l:"assets/ship_l.png",ship_h:"assets/ship_h.png",ship_shadow:"assets/ship_shadow.png",orb:"assets/orb.png",boss1:"assets/boss1.png",boss2:"assets/boss2.png",boss3:"assets/boss3.png",boss1_m:"assets/boss1_m.png",boss2_m:"assets/boss2_m.png",boss3_m:"assets/boss3_m.png",boss2_closed:"assets/boss2_closed.png",boss2_m_closed:"assets/boss2_m_closed.png",boss4:"assets/boss4.png",boss1_x:"assets/boss1_x.png",carrier2:"assets/carrier2.png",deck2:"assets/deck2.jpg",e_jelly:"assets/e_jelly.png",e_jelly_2:"assets/e_jelly_2.png",e_jelly_3:"assets/e_jelly_3.png",e_jelly_m:"assets/e_jelly_m.png",e_chick:"assets/e_chick.png",e_chick_2:"assets/e_chick_2.png",e_chick_3:"assets/e_chick_3.png",e_chick_m:"assets/e_chick_m.png",e_jellyfish:"assets/e_jellyfish.png",e_jellyfish_2:"assets/e_jellyfish_2.png",e_jellyfish_3:"assets/e_jellyfish_3.png",e_jellyfish_m:"assets/e_jellyfish_m.png",e_puffer:"assets/e_puffer.png",e_puffer_2:"assets/e_puffer_2.png",e_puffer_3:"assets/e_puffer_3.png",e_puffer_m:"assets/e_puffer_m.png",e_mini:"assets/e_mini.png",e_mini_2:"assets/e_mini_2.png",e_mini_3:"assets/e_mini_3.png",e_mini_m:"assets/e_mini_m.png",e_slug:"assets/e_slug.png",e_slug_2:"assets/e_slug_2.png",e_slug_3:"assets/e_slug_3.png",e_slug_m:"assets/e_slug_m.png",e_flower:"assets/e_flower.png",e_flower_2:"assets/e_flower_2.png",e_flower_3:"assets/e_flower_3.png",e_flower_m:"assets/e_flower_m.png"};
+const ASSET={logo:"assets/logo.jpg",pop:"assets/pop.png",maj:"assets/maj.png",sgt:"assets/sgt.png",space:"assets/space.jpg",space3:"assets/space3.jpg",earth:"assets/earthtex.jpg",moontex:"assets/moontex.jpg",moon:"assets/moon.png",ship_l:"assets/ship_l.png",ship_h:"assets/ship_h.png",ship_shadow:"assets/ship_shadow.png",orb:"assets/orb.png",boss1:"assets/boss1.png",boss2:"assets/boss2.png",boss3:"assets/boss3.png",boss1_m:"assets/boss1_m.png",boss2_m:"assets/boss2_m.png",boss3_m:"assets/boss3_m.png",boss2_closed:"assets/boss2_closed.png",boss2_m_closed:"assets/boss2_m_closed.png",boss4:"assets/boss4.png",boss1_x:"assets/boss1_x.png",funnel_x:"assets/funnel_x.png",carrier2:"assets/carrier2.png",deck2:"assets/deck2.jpg",e_jelly:"assets/e_jelly.png",e_jelly_2:"assets/e_jelly_2.png",e_jelly_3:"assets/e_jelly_3.png",e_jelly_m:"assets/e_jelly_m.png",e_chick:"assets/e_chick.png",e_chick_2:"assets/e_chick_2.png",e_chick_3:"assets/e_chick_3.png",e_chick_m:"assets/e_chick_m.png",e_jellyfish:"assets/e_jellyfish.png",e_jellyfish_2:"assets/e_jellyfish_2.png",e_jellyfish_3:"assets/e_jellyfish_3.png",e_jellyfish_m:"assets/e_jellyfish_m.png",e_puffer:"assets/e_puffer.png",e_puffer_2:"assets/e_puffer_2.png",e_puffer_3:"assets/e_puffer_3.png",e_puffer_m:"assets/e_puffer_m.png",e_mini:"assets/e_mini.png",e_mini_2:"assets/e_mini_2.png",e_mini_3:"assets/e_mini_3.png",e_mini_m:"assets/e_mini_m.png",e_slug:"assets/e_slug.png",e_slug_2:"assets/e_slug_2.png",e_slug_3:"assets/e_slug_3.png",e_slug_m:"assets/e_slug_m.png",e_flower:"assets/e_flower.png",e_flower_2:"assets/e_flower_2.png",e_flower_3:"assets/e_flower_3.png",e_flower_m:"assets/e_flower_m.png"};
 const MUSIC={ready:"assets/m_ready.mp3",lollipop:"assets/m_lollipop.mp3",first:"assets/m_first.mp3",hazelnut:"assets/m_hazelnut.mp3",border:"assets/m_border.mp3",outer:"assets/m_outer.mp3",fatal:"assets/m_fatal.mp3",final:"assets/m_final.mp3"};
 const FONT="'DotGothic16','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif";
-const VERSION='0.9.4';
+const VERSION='0.9.5';
 
 // ===== 画面 =====
 const W=480,H=270,HUD=18,PH=H-HUD;
@@ -146,6 +161,7 @@ const ENEMY_DEF={
   slug:{name:'ナメリン',img:'e_slug',r:12,hp:5,score:300},
   flower:{name:'ハナクチ',img:'e_flower',r:11,hp:2,score:150},
   shadow:{name:'カゲ（自機の影）',img:'ship_shadow',r:10,hp:14,score:800},
+  funnel:{name:'パールファンネル',img:null,r:7,hp:6,score:300},
   rock:{name:'鏡の破片（破壊不能）',img:null,r:12,hp:1,score:0},
   target:{name:'訓練用ターゲット',img:'e_jelly',r:11,hp:1,score:0},
 };
@@ -274,7 +290,7 @@ function sv(k,v){try{localStorage.setItem(k,v);}catch(e){}}
 unlocked2=ld('fantaryon_loop2')==='1';tutDone=ld('fantaryon_tut')==='1';
 function playing(){return(state==='stage'||state==='boss'||state==='warning'||state==='tutorial')&&!paused;}
 function resetRun(){score=0;lives=3;life=MAX_LIFE;bombs=3;power=1;kills=0;hits=0;continues=0;form='L';}
-function resetField(){P={x:70,y:PH/2,inv:2,cool:0,alive:true,respawn:0};shots=[];enemies=[];eshots=[];items=[];parts=[];boss=null;radio=null;radioQ=[];flash=0;shake=0;lastEnemyName='';bombFX=null;orbs=[{x:60,y:PH/2-15},{x:60,y:PH/2+15}];}
+function resetField(){P={x:70,y:PH/2,inv:2,cool:0,alive:true,respawn:0};shots=[];enemies=[];eshots=[];items=[];parts=[];boss=null;radio=null;radioQ=[];flash=0;shake=0;lastEnemyName='';bombFX=null;lasers=[];orbs=[{x:60,y:PH/2-15},{x:60,y:PH/2+15}];}
 
 // ===== 会話 =====
 const CHARS={pop:{name:'ポップ',img:'pop',col:'#ffb26a'},maj:{name:'シドウ少佐',img:'maj',col:'#c8d2ff'},sgt:{name:'ゴンダ軍曹',img:'sgt',col:'#b8e08a'},echo:{name:'？？？',img:'pop',col:'#b0b8d0',dark:true}};
@@ -585,7 +601,7 @@ function update(dt){
   if(state==='stage'){stageT+=dt;while(scriptI<SCRIPT.length&&SCRIPT[scriptI].t<=stageT){SCRIPT[scriptI++].f();if(state!=='stage')break;}}
   if(state==='warning'){stageT+=dt;if(stateT>3.2)beginBoss(stageNo);}
   if(state==='boss'&&boss)updateBoss(dt);
-  updateEnemies(dt);updateShots(dt);updateItems(dt);updateBomb(dt);
+  updateEnemies(dt);updateShots(dt);updateItems(dt);updateBomb(dt);updateLasers(dt);
   for(const p of parts){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=0.98;p.vy*=0.98;}parts=parts.filter(p=>p.t<p.life);
   if(radio){radio.t+=dt;if(radio.t>radio.d)radio=null;}if(!radio&&radioQ.length){radio=Object.assign(radioQ.shift(),{t:0});}
   if(banner){banner.t+=dt;if(banner.t>3.2)banner=null;}
@@ -647,6 +663,13 @@ function updateEnemies(dt){const s=ST[stageNo],sp=s.spd,bs=s.bspd;
     else if(e.type==='slug'){e.x-=(e.crawl?40:22)*dt;if(e.crawl&&terrainAmp())e.y=floorY(e.x)-11;else e.y=e.y0+Math.sin(e.t*0.9)*14;
       e.st=(e.st===undefined?1.2:e.st)-dt;if(e.st<=0&&P.alive&&e.x<W-10){e.st=2.4/bs;for(const o of [-0.3,0,0.3])aimShot(e.x-10,e.y,70*bs,o);}}
     else if(e.type==='flower'){if(e.t<e.wait){e.x-=50*dt;}else{if(!e.dash){e.dash=true;const a=Math.atan2(P.y-e.y,P.x-e.x);e.vx=Math.cos(a)*170*sp;e.vy=Math.sin(a)*170*sp;}e.x+=e.vx*dt;e.y+=e.vy*dt;}}
+    else if(e.type==='funnel'){
+      if(!boss||boss.dead||boss.core)e.hp=0;
+      else if(e.ret){e.x+=(boss.x-e.x)*Math.min(1,dt*3);e.y+=(boss.y-e.y)*Math.min(1,dt*3);if(Math.hypot(boss.x-e.x,boss.y-e.y)<16)e.hp=0;}
+      else if(e.sp){e.x+=(e.tx-e.x)*Math.min(1,dt*3.5);e.y+=(e.ty-e.y)*Math.min(1,dt*3.5);}
+      else{const a=boss.ang*1.6+(e.idx||0)*Math.PI*2/(e.of||1);e.x+=((boss.x-14+Math.cos(a)*62)-e.x)*Math.min(1,dt*3);e.y+=((boss.y+Math.sin(a)*48)-e.y)*Math.min(1,dt*3);
+        e.st=(e.st===undefined?1.6+(e.idx||0)*0.8:e.st)-dt;
+        if(e.st<=0&&P.alive&&!boss.sp&&boss.x<W-40){e.st=loop2?2.4:3.2;addLaser({src:e,aim:true,w:3,len:520,warn:0.6,dur:0.3,col:loop2?'#7affc8':'#c89bff'});}}}
     else if(e.type==='shadow'){const tx=(boss?boss.x:W)-110-(e.idx||0)*34;e.x+=(tx-e.x)*Math.min(1,dt*2);const ty=PH-P.y+(e.idx?24:0);e.y+=(Math.max(14,Math.min(PH-14,ty))-e.y)*Math.min(1,dt*3);
       e.st=(e.st===undefined?1:e.st)-dt;if(e.st<=0&&P.alive){e.st=1.3;aimShot(e.x-12,e.y,110,0);}}
     if(P.alive&&P.inv<=0&&Math.hypot(e.x-P.x,e.y-P.y)<e.r+3)playerHit(e.type==='rock');
@@ -679,7 +702,7 @@ function burst(x,y,col,n){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s
 
 // ===== ボス =====
 function bossHitTest(x,y){const B=boss;let cx=B.x+4,cy=B.y,rx=58,ry=36;if(B.kind===2){cx=B.x;cy=B.y+4;rx=62;ry=46;}else if(B.kind===3){cx=B.x;cy=B.y-14;rx=66;ry=38;}else if(B.kind===4){cx=B.x;cy=B.y;rx=46;ry=22;}const dx=(x-cx)/rx,dy=(y-cy)/ry;return dx*dx+dy*dy<1;}
-function bossMouth(){const B=boss;if(B.kind===1)return{x:B.x-56,y:B.y+6};if(B.kind===2)return{x:B.x-48,y:B.y};if(B.kind===4)return{x:B.x-48,y:B.y};return{x:B.x-50,y:B.y-12};}
+function bossMouth(){const B=boss;if(B.kind===1)return{x:B.x-56,y:B.y+6};if(B.kind===2)return{x:B.x-48,y:B.y};if(B.kind===4)return{x:B.x-48,y:B.y};if(loop2)return{x:B.x-62,y:B.y-14};return{x:B.x-50,y:B.y-12};}  // 2周目の3面ボスは機械の砲口の位置
 // ボスの上下移動：移動用の時計（B.mt）は動いている間だけ進め、目標位置へなめらかに寄せる。
 // 必殺技・溜め撃ちで止まった後や、体力の段階が変わって動き方が切り替わった時に瞬間移動しないため。
 function bossY(B,dt,ty){B.mt=(B.mt||0)+dt;B.y+=(ty-B.y)*Math.min(1,dt*2.5);}
@@ -698,31 +721,31 @@ function updateBoss(dt){const B=boss;B.t+=dt;B.flash=Math.max(0,B.flash-dt);
   B.ang+=dt*(B.phase===2?1.2:0.6);
   if(B.kind!==2&&Math.random()<dt*3)parts.push({x:B.x+(Math.random()-0.3)*100,y:B.y+40,vx:-10,vy:-25-Math.random()*20,t:0,life:2,col:'#d8f0ff',sz:3,bub:true});
   if(B.x>W-40)return;
-  if(B.kind!==3&&updateSpecial(B,dt)){if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();return;}
+  if(updateSpecial(B,dt)){if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();return;}
   const m=bossMouth(),bs=ST[stageNo].bspd;
   if(B.kind===1){
     if(B.phase===0){bossY(B,dt,PH/2+Math.sin((B.mt||0)*0.8)*40);B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=2.4;for(const s of [-1,1])spawn('jelly',m.x,m.y+s*16);}
-      B.shotT-=dt;if(B.shotT<=0&&P.alive){B.shotT=1.4;for(const o of [-0.25,0,0.25])aimShot(m.x,m.y,95,o);}}
-    else if(B.phase===1){bossY(B,dt,PH/2+Math.sin((B.mt||0)*1.1)*58);B.shotT-=dt;if(B.shotT<=0){B.shotT=1.3;ringShot(B.x,B.y,16,70,B.ang);}
+      B.shotT-=dt;if(B.shotT<=0&&P.alive){B.shotT=1.8;for(const o of [-0.25,0,0.25])aimShot(m.x,m.y,95,o);}}
+    else if(B.phase===1){bossY(B,dt,PH/2+Math.sin((B.mt||0)*1.1)*58);B.shotT-=dt;if(B.shotT<=0){B.shotT=1.7;ringShot(B.x,B.y,12,70,B.ang);}
       B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=3;spawn('flower',m.x,m.y,{wait:0.3});}}
-    else{bossY(B,dt,PH/2+Math.sin((B.mt||0)*0.6)*30);B.shotT-=dt;if(B.shotT<=0){B.shotT=0.12;const a=B.ang*3;for(const o of [0,Math.PI])eshots.push({x:B.x,y:B.y,vx:Math.cos(a+o)*65,vy:Math.sin(a+o)*65});}
-      B.spawnT-=dt;if(B.spawnT<=0&&P.alive){B.spawnT=1.8;aimShot(m.x,m.y,110,0);}}
+    else{bossY(B,dt,PH/2+Math.sin((B.mt||0)*0.6)*30);B.shotT-=dt;if(B.shotT<=0){B.shotT=0.2;const a=B.ang*3;for(const o of [0,Math.PI])eshots.push({x:B.x,y:B.y,vx:Math.cos(a+o)*65,vy:Math.sin(a+o)*65});}
+      B.spawnT-=dt;if(B.spawnT<=0&&P.alive){B.spawnT=2.4;aimShot(m.x,m.y,110,0);}}
   }else if(B.kind===2){
     bossY(B,dt,PH/2+Math.sin((B.mt||0)*0.7)*(B.phase===2?50:30));
     B.cyc-=dt;
     if(B.cyc<=0){B.open=!B.open;B.cyc=B.open?(B.phase===2?4.2:3.2):(B.phase===2?1.4:2.2);
-      if(B.open){ringShot(m.x,m.y,B.phase===0?14:20,70*bs,B.ang);const want=B.phase===0?1:2;const have=enemies.filter(e=>e.type==='shadow').length;for(let i=have;i<want;i++)spawn('shadow',B.x-30,B.y,{idx:i});}}
-    if(B.open){B.shotT-=dt;if(B.shotT<=0&&P.alive){B.shotT=B.phase===2?0.6:0.9;for(const o of [-0.2,0,0.2])aimShot(m.x,m.y,100*bs,o);}}
-    else{B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=1.1;ringShot(B.x,B.y,8,55,B.ang*2);}}
+      if(B.open){ringShot(m.x,m.y,B.phase===0?10:14,70*bs,B.ang);refillFunnels(B);}}
+    if(B.open){B.shotT-=dt;if(B.shotT<=0&&P.alive){B.shotT=B.phase===2?0.9:1.3;for(const o of [-0.2,0,0.2])aimShot(m.x,m.y,100*bs,o);}}
+    else{B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=1.6;ringShot(B.x,B.y,8,55,B.ang*2);}}
   }else{
     if(bossBeam(B,dt)){if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();return;}
     bossY(B,dt,PH/2+Math.sin((B.mt||0)*0.5)*36);
-    if(B.phase===0){B.shotT-=dt;if(B.shotT<=0&&P.alive){B.shotT=1.4;for(const o of [-0.3,-0.15,0,0.15,0.3])aimShot(m.x,m.y,95*bs,o);}
-      B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=0.18;const tx2=B.x-50+Math.random()*100;eshots.push({x:tx2,y:B.y+40,vx:-70-Math.random()*30,vy:(Math.random()<0.5?-1:1)*(20+Math.random()*40)});}}
-    else if(B.phase===1){B.shotT-=dt;if(B.shotT<=0){B.shotT=0.1;const a=B.ang*2.6;for(const o of [0,Math.PI*2/3,Math.PI*4/3])eshots.push({x:B.x,y:B.y-14,vx:Math.cos(a+o)*70,vy:Math.sin(a+o)*70});}
+    if(B.phase===0){B.shotT-=dt;if(B.shotT<=0&&P.alive){B.shotT=1.9;for(const o of [-0.3,-0.15,0,0.15,0.3])aimShot(m.x,m.y,95*bs,o);}
+      B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=0.32;const tx2=B.x-50+Math.random()*100;eshots.push({x:tx2,y:B.y+40,vx:-70-Math.random()*30,vy:(Math.random()<0.5?-1:1)*(20+Math.random()*40)});}}
+    else if(B.phase===1){B.shotT-=dt;if(B.shotT<=0){B.shotT=0.17;const a=B.ang*2.6;for(const o of [0,Math.PI*2/3,Math.PI*4/3])eshots.push({x:B.x,y:B.y-14,vx:Math.cos(a+o)*70,vy:Math.sin(a+o)*70});}
       B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=3;for(const s of [-1,1])spawn('mini',B.x-40,B.y+s*30,{vx:-60,vy:s*30});}}
-    else{B.shotT-=dt;if(B.shotT<=0){B.shotT=1.1;ringShot(B.x,B.y-14,22,72*bs,B.ang);}
-      B.spawnT-=dt;if(B.spawnT<=0&&P.alive){B.spawnT=0.7;aimShot(m.x,m.y,130,0);}}
+    else{B.shotT-=dt;if(B.shotT<=0){B.shotT=1.5;ringShot(B.x,B.y-14,16,72*bs,B.ang);}
+      B.spawnT-=dt;if(B.spawnT<=0&&P.alive){B.spawnT=1.0;aimShot(m.x,m.y,130,0);}}
   }
   if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();
 }
@@ -733,34 +756,105 @@ function updateBoss(dt){const B=boss;B.t+=dt;B.flash=Math.max(0,B.flash-dt);
 // もう一人のLOLLIPOP：「ミラーバースト」（自機そっくりの弾の連射＋全方位弾）
 const SPECIAL={1:'群体放出',2:'真珠螺旋',3:'フェイタル・レイ',4:'ミラーバースト'};
 const SPECIAL_M={1:'改造キャノン',2:'双螺旋',3:'ツイン・フェイタルレイ',4:'ミラーバースト'};
+// 各ボスの技の並び（1つ目は体力2/3、2つ目は体力1/3で初回発動。以後は順番に繰り返す）。
+// 3面ボスの1つ目（フェイタル・レイ系）は溜め撃ちビーム側で発動するため、ここには2つ目だけを置く。
+const SP_LIST={1:['gun','tri'],2:['spiral','fray'],3:['sweep'],4:['mirror','mlaser','tri4']};
+const SP_LIST_M={1:['cannon','penta'],2:['spiral2','fcage'],3:['xsweep'],4:['mirror','mlaser','tri4']};
+const SP_NAME={gun:'群体放出',tri:'三叉レーザー',spiral:'真珠螺旋',fray:'ファンネル・レイ',sweep:'薙ぎ払いレイ',
+  cannon:'改造キャノン',penta:'五叉レーザー',spiral2:'双螺旋',fcage:'ファンネル包囲',xsweep:'交差薙ぎ払い',
+  mirror:'ミラーバースト',mlaser:'ミラーレーザー',tri4:'トライレーザー'};
 let spCut=null;
 function spName(k){return (loop2?SPECIAL_M:SPECIAL)[k];}
-function showSpecial(k){spCut={t:0,name:spName(k),kind:k};sfx('warn');shake=Math.max(shake,0.6);}
+function showSpecial(k,name){spCut={t:0,name:name||spName(k),kind:k};sfx('warn');shake=Math.max(shake,0.6);}
+// ===== 直線レーザー（必殺技・ファンネル用）=====
+// 予告線をwarn秒 → 太い帯をdur秒照射。照射中のみ当たり判定。aim：予告の前半だけ自機を追う。a0→a1：照射中に角度を振る（薙ぎ払い）。
+let lasers=[];
+function laserOrigin(L){if(L.src){if(L.src.hp<=0)return null;return{x:L.src.x,y:L.src.y};}return{x:L.x,y:L.y};}
+function addLaser(o){const L=Object.assign({t:0,len:640,w:8,warn:0.9,dur:0.9,col:'#ff6fae',ang:Math.PI},o);
+  const p=laserOrigin(L);if(!p)return;L.x=p.x;L.y=p.y;if(L.aim)L.ang=Math.atan2(P.y-L.y,P.x-L.x);
+  if(L.a0!==undefined){let d=L.a1-L.a0;while(d>Math.PI)d-=Math.PI*2;while(d<-Math.PI)d+=Math.PI*2;L.a1=L.a0+d;L.ang=L.a0;}
+  lasers.push(L);}
+function updateLasers(dt){
+  if(!boss||boss.dead||boss.core){lasers=[];return;}
+  for(const L of lasers){L.t+=dt;const p=laserOrigin(L);if(!p){L.t=1e9;continue;}L.x=p.x;L.y=p.y;
+    if(L.aim&&L.t<L.warn*0.6)L.ang=Math.atan2(P.y-L.y,P.x-L.x);
+    if(L.a0!==undefined)L.ang=L.a0+(L.a1-L.a0)*Math.max(0,Math.min(1,(L.t-L.warn)/L.dur));
+    if(L.t>=L.warn&&L.t<L.warn+L.dur){
+      if(!L.fired){L.fired=true;if(L.w>=8){sfx('beam');shake=Math.max(shake,L.w>=14?0.6:0.3);}else sfx('laser');}
+      if(P.alive&&P.inv<=0){const c=Math.cos(L.ang),sn=Math.sin(L.ang),px=P.x-L.x,py=P.y-L.y,al=px*c+py*sn;
+        if(al>0&&al<L.len&&Math.abs(px*sn-py*c)<L.w/2+1.5)playerHit();}}}
+  lasers=lasers.filter(L=>L.t<L.warn+L.dur);}
+function drawLasers(g){if(!lasers.length)return;g.save();g.lineCap='round';
+  for(const L of lasers){const c=Math.cos(L.ang),sn=Math.sin(L.ang),x2=L.x+c*L.len,y2=L.y+sn*L.len;
+    const line=()=>{g.beginPath();g.moveTo(L.x,L.y);g.lineTo(x2,y2);g.stroke();};
+    if(L.t<L.warn){g.globalAlpha=0.35+0.35*Math.sin(L.t*30);g.strokeStyle=L.col;g.lineWidth=1;line();
+      g.globalAlpha=0.85;g.fillStyle=L.col;g.beginPath();g.arc(L.x,L.y,1.5+(L.t/L.warn)*L.w*0.45,0,Math.PI*2);g.fill();}
+    else{const ft=L.t-L.warn,w=Math.max(0.5,L.w*Math.min(1,ft/0.08)*Math.min(1,(L.warn+L.dur-L.t)/0.15));
+      g.globalCompositeOperation='lighter';g.strokeStyle=L.col;g.globalAlpha=0.45;g.lineWidth=w*1.7;line();g.globalAlpha=0.95;g.lineWidth=w;line();
+      g.strokeStyle='#ffffff';g.lineWidth=Math.max(0.5,w*0.35);line();g.globalCompositeOperation='source-over';}}
+  g.restore();}
+// ファンネルの補充（殻が開くたび）。番号を振り直して等間隔に回す。
+function refillFunnels(B){const want=loop2?(B.phase===2?4:3):(B.phase===2?3:2);
+  const cur=enemies.filter(e=>e.type==='funnel'&&!e.sp&&!e.ret);for(let i=cur.length;i<want;i++){spawn('funnel',B.x-20,B.y);cur.push(enemies[enemies.length-1]);}
+  cur.forEach((f,i)=>{f.idx=i;f.of=cur.length;});}
+function spFunnel(B,x,y){spawn('funnel',B.x-20,B.y,{sp:true,tx:x,ty:y});return enemies[enemies.length-1];}
 function updateSpecial(B,dt){
-  if(!B.sp){if(B.spCd===undefined)B.spCd=1e9;if(B.phase>=1&&!B.spDone){B.spDone=true;B.spCd=0.6;}
+  if(!B.sp){const list=(loop2?SP_LIST_M:SP_LIST)[B.kind];if(B.spCd===undefined){B.spCd=1e9;B.spN=0;}
+    if(B.kind!==3&&B.phase>=1&&!B.spDone){B.spDone=true;B.spCd=Math.min(B.spCd,0.6);B.spForce=list[0];}
+    if(B.phase>=2&&!B.sp2Done){B.sp2Done=true;const k2=list[1]||list[0];if(B.spLast!==k2&&!(B.sp&&B.sp.key===k2)){B.spCd=Math.min(B.spCd,0.6);B.spForce=k2;}}
     B.spCd-=dt;if(B.spCd>0||!P.alive||B.beam||B.dash>0)return false;
-    B.sp={t:0,n:0};showSpecial(B.kind);if(B.kind===2){B.open=true;B.cyc=99;}}
-  const S=B.sp;S.t+=dt;const m=bossMouth();
-  if(S.t<1.0){if(B.kind===2)B.open=true;return true;}
-  if(B.kind===1&&!loop2){
-    if(S.t<3.0){S.e=(S.e||0)-dt;if(S.e<=0){S.e=0.16;const a=Math.PI+(Math.random()-0.5)*1.6;eshots.push({x:m.x,y:m.y,vx:Math.cos(a)*70,vy:Math.sin(a)*70,home:1.3,col:'#ffb0e0',r:3.5});}}
+    const key=B.spForce||list[B.spN%list.length];B.spForce=null;B.spN=list.indexOf(key)+1;B.spLast=key;
+    B.sp={t:0,key};showSpecial(B.kind,SP_NAME[key]);if(B.kind===2){B.open=true;B.cyc=99;}}
+  const S=B.sp,K=S.key;S.t+=dt;const m=bossMouth();if(B.kind===2)B.open=true;
+  if(S.t<1.0)return true;
+  if(K==='tri'){
+    if(!S.w1){S.w1=true;for(const o of [-0.38,0,0.38])addLaser({x:m.x,y:m.y,ang:Math.PI+o,w:9,warn:0.9,dur:1.0,col:'#ff6fae'});}
+    if(!S.w2&&S.t>=2.8){S.w2=true;const a=Math.atan2(P.y-m.y,P.x-m.x);for(const o of [-0.32,0,0.32])addLaser({x:m.x,y:m.y,ang:a+o,w:9,warn:0.8,dur:0.9,col:'#ff6fae'});}
+    if(S.t>4.8)return endSpecial(B,13);}
+  else if(K==='penta'){
+    if(!S.w1){S.w1=true;for(const o of [-0.6,-0.3,0,0.3,0.6])addLaser({x:m.x,y:m.y,ang:Math.PI+o,w:8,warn:0.9,dur:0.9,col:'#ff5a5a'});}
+    if(!S.w2&&S.t>=2.7){S.w2=true;for(const o of [-0.45,-0.15,0.15,0.45,0.75])addLaser({x:m.x,y:m.y,ang:Math.PI+o,w:8,warn:0.9,dur:0.9,col:'#ff5a5a'});}
+    if(S.t>4.7)return endSpecial(B,12);}
+  else if(K==='fray'){
+    if(!S.f){S.f=[[150,20],[290,20],[150,PH-20],[290,PH-20]].map(p=>spFunnel(B,p[0],p[1]));}
+    S.f.forEach((f,i)=>{if(!f.fired&&S.t>=1.9+i*0.5){f.fired=true;if(f.hp>0)addLaser({src:f,aim:true,w:6,warn:0.7,dur:0.5,col:'#c89bff'});}});
+    if(S.t>4.7){for(const f of S.f)f.ret=true;return endSpecial(B,14);}}
+  else if(K==='fcage'){
+    if(!S.f){S.f=[[120,12,Math.PI/2],[260,12,Math.PI/2],[190,PH-12,-Math.PI/2],[330,PH-12,-Math.PI/2],[12,70,0],[12,182,0]].map(p=>{const f=spFunnel(B,p[0],p[1]);f.dir=p[2];return f;});}
+    if(!S.w1&&S.t>=2.3){S.w1=true;for(const f of S.f)if(f.hp>0)addLaser({src:f,ang:f.dir,w:6,warn:1.0,dur:1.1,col:'#7affc8'});}
+    S.f.forEach((f,i)=>{if(!f.fired&&S.t>=4.5+i*0.25){f.fired=true;if(f.hp>0)addLaser({src:f,aim:true,w:5,warn:0.6,dur:0.4,col:'#7affc8'});}});
+    if(S.t>6.6){for(const f of S.f)f.ret=true;return endSpecial(B,14);}}
+  else if(K==='sweep'||K==='xsweep'){
+    if(!S.w1){S.w1=true;const L=(ya,yb,w)=>addLaser({x:m.x,y:m.y,a0:Math.atan2(ya-m.y,-m.x),a1:Math.atan2(yb-m.y,-m.x),w,warn:1.1,dur:K==='sweep'?2.2:2.4,col:'#5ff0ff'});
+      if(K==='sweep'){if(P.y<PH/2)L(6,PH*0.6,20);else L(PH-6,PH*0.4,20);}
+      else{L(6,PH*0.42,14);L(PH-6,PH*0.58,14);}}
+    if(S.t>(K==='sweep'?4.6:4.9))return endSpecial(B,14);}
+  else if(K==='mlaser'){
+    if(!S.w1){S.w1=true;addLaser({x:m.x,y:m.y,aim:true,w:16,warn:0.9,dur:1.3,col:'#ffa040'});}
+    if(!S.w2&&S.t>=3.1){S.w2=true;addLaser({x:m.x,y:m.y,aim:true,w:16,warn:0.9,dur:1.3,col:'#ffa040'});}
+    if(S.t>5.4)return endSpecial(B,12);}
+  else if(K==='tri4'){
+    if(!S.w1){S.w1=true;const a=Math.atan2(P.y-m.y,P.x-m.x);for(const o of [-0.3,0.3])addLaser({x:m.x,y:m.y,ang:a+o,w:8,warn:0.8,dur:1.8,col:'#e8ff6a'});}
+    if(!S.w2&&S.t>=1.5){S.w2=true;addLaser({x:m.x,y:m.y,aim:true,w:10,warn:0.7,dur:0.7,col:'#e8ff6a'});}
+    if(S.t>4.2)return endSpecial(B,12);}
+  else if(K==='gun'){
+    if(S.t<3.0){S.e=(S.e||0)-dt;if(S.e<=0){S.e=0.3;const a=Math.PI+(Math.random()-0.5)*1.6;eshots.push({x:m.x,y:m.y,vx:Math.cos(a)*70,vy:Math.sin(a)*70,home:1.3,col:'#ffb0e0',r:3.5});}}
     else if(S.t>3.4)return endSpecial(B,13);}
-  else if(B.kind===1&&loop2){
+  else if(K==='cannon'){
     if(!S.beamed){S.beamed=true;B.beam={t:0.6,y:Math.max(30,Math.min(PH-30,P.y))};sfx('charge');}
-    if(S.t>1.4&&!S.mis){S.mis=true;for(let i=0;i<6;i++){const a=Math.PI+(i-2.5)*0.45;eshots.push({x:B.x-20,y:B.y,vx:Math.cos(a)*85,vy:Math.sin(a)*85,home:1.6,col:'#ffb04a',r:3.5});}}
+    if(S.t>1.4&&!S.mis){S.mis=true;for(let i=0;i<4;i++){const a=Math.PI+(i-1.5)*0.55;eshots.push({x:B.x-20,y:B.y,vx:Math.cos(a)*85,vy:Math.sin(a)*85,home:1.6,col:'#ffb04a',r:3.5});}}
     if(!bossBeam(B,dt))return endSpecial(B,12);}
-  else if(B.kind===2){
-    B.open=true;
-    if(S.t<3.6){S.e=(S.e||0)-dt;if(S.e<=0){S.e=loop2?0.07:0.06;const a=S.t*(loop2?4.2:5);const spd=loop2?82:75;
+  else if(K==='spiral'||K==='spiral2'){
+    if(S.t<3.6){S.e=(S.e||0)-dt;if(S.e<=0){S.e=loop2?0.13:0.11;const a=S.t*(loop2?4.2:5);const spd=loop2?82:75;
       eshots.push({x:B.x-10,y:B.y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,col:'#fff0ff',r:3});
       if(loop2)eshots.push({x:B.x-10,y:B.y,vx:Math.cos(-a+Math.PI)*spd,vy:Math.sin(-a+Math.PI)*spd,col:'#e8d0ff',r:3});}}
-    else{B.cyc=1.2;return endSpecial(B,14);}}
-  else if(B.kind===4){
-    if(S.t<3.0){S.e=(S.e||0)-dt;if(S.e<=0){S.e=0.12;const a=Math.atan2(P.y-m.y,P.x-m.x)+(Math.random()-0.5)*0.25;eshots.push({x:m.x,y:m.y,vx:Math.cos(a)*170,vy:Math.sin(a)*170,col:'#e8ff6a',r:2.5});}}
-    else if(!S.ring){S.ring=true;ringShot(B.x,B.y,24,75,B.ang);}
+    else return endSpecial(B,14);}
+  else if(K==='mirror'){
+    if(S.t<3.0){S.e=(S.e||0)-dt;if(S.e<=0){S.e=0.2;const a=Math.atan2(P.y-m.y,P.x-m.x)+(Math.random()-0.5)*0.25;eshots.push({x:m.x,y:m.y,vx:Math.cos(a)*170,vy:Math.sin(a)*170,col:'#e8ff6a',r:2.5});}}
+    else if(!S.ring){S.ring=true;ringShot(B.x,B.y,16,75,B.ang);}
     else if(S.t>3.4)return endSpecial(B,12);}
   return true;}
-function endSpecial(B,cd){B.sp=null;B.spCd=cd;return true;}
+function endSpecial(B,cd){B.sp=null;B.spCd=cd;if(B.kind===2)B.cyc=1.2;return true;}
 function drawSpecialCut(){
   if(!spCut)return;const t=spCut.t;if(t>1.3){spCut=null;return;}
   const k=Math.min(1,t/0.18),o=t>1.05?(t-1.05)/0.25:0,x=(1-k)*W-o*W;const col=spCut.kind===3?'#5ff0ff':spCut.kind===4?'#ffd24a':'#ff6fae';
@@ -802,10 +896,10 @@ function updateBoss4(dt){const B=boss;const ratio=B.hp/B.max;B.phase=ratio>0.66?
   if(B.x<W-30&&updateSpecial(B,dt)){if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();return;}
   B.y+=(Math.max(24,Math.min(PH-24,P.y))-B.y)*Math.min(1,dt*(B.phase===2?2.2:1.4));
   const m=bossMouth();
-  B.shotT-=dt;if(B.shotT<=0&&P.alive){B.shotT=B.phase===0?0.8:0.6;for(const o of [-0.24,-0.12,0,0.12,0.24])aimShot(m.x,m.y,120,o);}
+  B.shotT-=dt;if(B.shotT<=0&&P.alive){B.shotT=B.phase===0?1.1:0.85;for(const o of [-0.24,-0.12,0,0.12,0.24])aimShot(m.x,m.y,120,o);}
   if(B.phase>=1){B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=4;B.dash=1.4;B.dx=P.x;}
-    if(B.dash>0){B.dash-=dt;if(B.dash>0.7)B.x+=(Math.max(60,B.dx)-B.x)*Math.min(1,dt*3);else B.x+=((W-90)-B.x)*Math.min(1,dt*3);if(B.dash<=0){B.dash=0;ringShot(B.x,B.y,16,70,B.ang);}}}
-  if(B.phase===2){if(bossBeam(B,dt)){if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();return;}B.rT=(B.rT||2)-dt;if(B.rT<=0){B.rT=2.2;ringShot(B.x,B.y,24,60,B.ang*2);}}
+    if(B.dash>0){B.dash-=dt;if(B.dash>0.7)B.x+=(Math.max(60,B.dx)-B.x)*Math.min(1,dt*3);else B.x+=((W-90)-B.x)*Math.min(1,dt*3);if(B.dash<=0){B.dash=0;ringShot(B.x,B.y,12,70,B.ang);}}}
+  if(B.phase===2){if(bossBeam(B,dt)){if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();return;}B.rT=(B.rT||2)-dt;if(B.rT<=0){B.rT=2.8;ringShot(B.x,B.y,16,60,B.ang*2);}}
   if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();}
 function hurtBoss(d,bomb){const B=boss;if(B.x>W-30||B.dead||B.core)return;if(B.kind===2&&!B.open&&!bomb)return;B.hp-=d*(DBG.inv?3:1);B.flash=0.06;lastEnemyName=bossName(B.kind);
   if(B.hp<=0){B.hp=0;eshots=[];enemies=[];
@@ -890,7 +984,15 @@ function enemyImg(e){const d=ENEMY_DEF[e.type];if(e.type==='shadow')return IMG.s
 function drawRock(e){const n=6;b.save();b.translate(Math.round(e.x),Math.round(e.y));b.rotate(e.rot);b.beginPath();
   for(let i=0;i<n;i++){const a=i*Math.PI*2/n,r=e.r*(i%2?0.75:1.1);i?b.lineTo(Math.cos(a)*r,Math.sin(a)*r):b.moveTo(Math.cos(a)*r,Math.sin(a)*r);}
   b.closePath();b.fillStyle='#1c2a44';b.fill();b.strokeStyle='#8ff0ff';b.lineWidth=1;b.stroke();b.fillStyle='rgba(200,250,255,0.5)';b.fillRect(-2,-e.r*0.6,2,e.r*0.5);b.restore();}
-function drawEnemy(e){if(e.type==='rock'){drawRock(e);return;}const im=enemyImg(e);if(!im||!im.complete)return;
+// パールファンネル：真珠の玉＋外周の輪（敵画像は使わず描画）
+function drawFunnel(e){const g=b,col=loop2?'#7affc8':'#c89bff',x=Math.round(e.x),y=Math.round(e.y);
+  if(loop2&&IMG.funnel_x&&IMG.funnel_x.complete){const im=IMG.funnel_x,ix=x-(im.width>>1),iy=y-(im.height>>1);g.drawImage(im,ix,iy);
+    if(e.flash>0){g.globalCompositeOperation='lighter';g.globalAlpha=0.6;g.drawImage(im,ix,iy);g.globalAlpha=1;g.globalCompositeOperation='source-over';}return;}
+  g.fillStyle='rgba(0,0,0,0.55)';g.beginPath();g.arc(x,y,6,0,Math.PI*2);g.fill();
+  g.fillStyle=e.flash>0?'#ffffff':'#f4ecff';g.beginPath();g.arc(x,y,4.5,0,Math.PI*2);g.fill();
+  g.fillStyle='#ffffff';g.fillRect(x-2,y-3,2,2);
+  g.strokeStyle=col;g.lineWidth=1;g.beginPath();g.arc(x,y,6.5,e.t*4,e.t*4+Math.PI*1.4);g.stroke();}
+function drawEnemy(e){if(e.type==='rock'){drawRock(e);return;}if(e.type==='funnel'){drawFunnel(e);return;}const im=enemyImg(e);if(!im||!im.complete)return;
   const bob=(e.type==='jelly'||e.type==='jellyfish')?Math.round(Math.sin(e.t*6)):0;
   const x=Math.round(e.x-im.width/2),y=Math.round(e.y-im.height/2)+bob;b.drawImage(im,x,y);
   if(e.flash>0){b.globalCompositeOperation='lighter';b.globalAlpha=0.6;b.drawImage(im,x,y);b.globalAlpha=1;b.globalCompositeOperation='source-over';}}
@@ -1266,7 +1368,7 @@ function render(isPortrait){
   ctx.setTransform(sc*dpr,0,0,sc*dpr,(ox+sh*sc)*dpr,(oy+sv*sc)*dpr);
   if(state==='syslog'){ctx.restore();drawSyslog();return;}
   drawBackground(ctx,bgScroll);
-  drawSprites();ctx.imageSmoothingEnabled=false;ctx.drawImage(buf,0,0);drawBeam(ctx);drawRam(ctx);
+  drawSprites();ctx.imageSmoothingEnabled=false;ctx.drawImage(buf,0,0);drawBeam(ctx);drawLasers(ctx);drawRam(ctx);
   drawBombFX(ctx);
   drawSpecialCut();
   if(flash>0){ctx.fillStyle='rgba(255,255,255,'+(flash*0.75)+')';ctx.fillRect(0,0,W,H);}
