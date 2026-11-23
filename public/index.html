@@ -8,7 +8,8 @@
  音楽      : Romeo Hijo（Delusion sound track 01）
  スタッフ  : 制作スタジオ ottoky studio／ゲーム制作 おとっきー／シナリオ おとっきー・Romeo Hijo／
              デザイン おとっきー／キャラクター Romeo Hijo／音楽 Romeo Hijo
- 版        : 0.9.2（2026-11-23）オープニングを作り直し（警報をじわじわ、ドラグナー風のカットイン、3人並び）／Androidのバージョン番号を自動採番
+ 版        : 0.9.3（2026-11-23）ゲームパッド対応（標準配置・アナログ移動・振動・操作説明の切り替え）
+             0.9.2（2026-11-23）オープニングを作り直し（警報をじわじわ、ドラグナー風のカットイン、3人並び）／Androidのバージョン番号を自動採番
              0.9.1（2026-11-23）画像・BGMを別ファイル化（iPhoneのSafari・Chromeで読み込みが途中で切れる問題への対策）／
              空母画像差し替え・甲板シーンの機体を拡大
              0.9（2026-11-23）OP再構成（月の来訪体→スクランブル→甲板→空母→大気圏外、ブースターなし）／
@@ -66,6 +67,9 @@
              キーボード 矢印/WASD＝移動、Shift＝低速、Z/Space/J＝ショット、X/K＝ボム、C＝換装（3面）、
                         Enter/Z＝決定・会話送り、S＝会話スキップ、Esc/P＝一時停止
              マウス  クリック長押し＝ショット
+             ゲームパッド 十字キー/左スティック＝移動（スティックはアナログ）、A/RT＝ショット・決定、B＝ボム・戻る、
+                        X/Y＝換装（3面）、LB/RB/LT＝低速、BACK＝会話スキップ、START＝一時停止。
+                        パッド操作中は画面の操作説明をパッド表記に切り替える。被弾・ボムで振動（対応環境のみ）
  音        : BGMはWeb Audio APIでループ再生。メモリ節約のため、使う直前に1曲ずつ展開し、使わない曲は解放する。
              効果音は合成（素材ファイルなし）。
 ================================================================
@@ -98,7 +102,7 @@ canvas{outline:none;position:fixed;inset:0;width:100vw;height:100vh;height:100dv
 const ASSET={logo:"assets/logo.jpg",pop:"assets/pop.png",maj:"assets/maj.png",sgt:"assets/sgt.png",space:"assets/space.jpg",space3:"assets/space3.jpg",earth:"assets/earthtex.jpg",moontex:"assets/moontex.jpg",moon:"assets/moon.png",ship_l:"assets/ship_l.png",ship_h:"assets/ship_h.png",ship_shadow:"assets/ship_shadow.png",orb:"assets/orb.png",boss1:"assets/boss1.png",boss2:"assets/boss2.png",boss3:"assets/boss3.png",boss1_m:"assets/boss1_m.png",boss2_m:"assets/boss2_m.png",boss3_m:"assets/boss3_m.png",boss2_closed:"assets/boss2_closed.png",boss2_m_closed:"assets/boss2_m_closed.png",boss4:"assets/boss4.png",carrier2:"assets/carrier2.png",deck2:"assets/deck2.jpg",e_jelly:"assets/e_jelly.png",e_jelly_2:"assets/e_jelly_2.png",e_jelly_3:"assets/e_jelly_3.png",e_jelly_m:"assets/e_jelly_m.png",e_chick:"assets/e_chick.png",e_chick_2:"assets/e_chick_2.png",e_chick_3:"assets/e_chick_3.png",e_chick_m:"assets/e_chick_m.png",e_jellyfish:"assets/e_jellyfish.png",e_jellyfish_2:"assets/e_jellyfish_2.png",e_jellyfish_3:"assets/e_jellyfish_3.png",e_jellyfish_m:"assets/e_jellyfish_m.png",e_puffer:"assets/e_puffer.png",e_puffer_2:"assets/e_puffer_2.png",e_puffer_3:"assets/e_puffer_3.png",e_puffer_m:"assets/e_puffer_m.png",e_mini:"assets/e_mini.png",e_mini_2:"assets/e_mini_2.png",e_mini_3:"assets/e_mini_3.png",e_mini_m:"assets/e_mini_m.png",e_slug:"assets/e_slug.png",e_slug_2:"assets/e_slug_2.png",e_slug_3:"assets/e_slug_3.png",e_slug_m:"assets/e_slug_m.png",e_flower:"assets/e_flower.png",e_flower_2:"assets/e_flower_2.png",e_flower_3:"assets/e_flower_3.png",e_flower_m:"assets/e_flower_m.png"};
 const MUSIC={ready:"assets/m_ready.mp3",lollipop:"assets/m_lollipop.mp3",first:"assets/m_first.mp3",hazelnut:"assets/m_hazelnut.mp3",border:"assets/m_border.mp3",outer:"assets/m_outer.mp3",fatal:"assets/m_fatal.mp3",final:"assets/m_final.mp3"};
 const FONT="'DotGothic16','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif";
-const VERSION='0.9.2';
+const VERSION='0.9.3';
 
 // ===== 画面 =====
 const W=480,H=270,HUD=18,PH=H-HUD;
@@ -197,8 +201,28 @@ function noise(d,v,t,f0,echo){if(!noiseBuf){noiseBuf=AC.createBuffer(1,AC.sample
 // ===== 入力 =====
 const keys={};let pressed={};
 addEventListener('touchend',()=>initAudio(),{passive:true});
-addEventListener('keydown',e=>{isTouch=false;if(state==='boot'&&(e.code==='Enter'||e.code==='Space'))goFull();if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','Tab'].includes(e.key)||e.code==='Space')e.preventDefault();if(!keys[e.code])pressed[e.code]=true;keys[e.code]=true;initAudio();});
+addEventListener('keydown',e=>{isTouch=false;usePad=false;if(state==='boot'&&(e.code==='Enter'||e.code==='Space'))goFull();if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','Tab'].includes(e.key)||e.code==='Space')e.preventDefault();if(!keys[e.code])pressed[e.code]=true;keys[e.code]=true;initAudio();});
 addEventListener('keyup',e=>{keys[e.code]=false;});
+// ===== ゲームパッド（標準配置）=====
+// 十字キー/左スティック＝移動（スティックはアナログ）、A＝ショット・決定、RT＝ショット、B＝ボム・戻る、X/Y＝換装、
+// LB/RB/LT＝低速、BACK＝会話スキップ、START＝一時停止。被弾とボムで振動（対応パッド・ブラウザのみ）。
+let usePad=false;const padAxis={x:0,y:0,on:false};const padPrev={};
+const PAD_MAP=[[0,['KeyZ']],[1,['KeyX','Backspace']],[2,['KeyC']],[3,['KeyC']],[4,['ShiftLeft']],[5,['ShiftLeft']],[6,['ShiftLeft']],[7,['KeyZ']],
+  [8,['KeyS']],[9,['Escape']],[12,['ArrowUp']],[13,['ArrowDown']],[14,['ArrowLeft']],[15,['ArrowRight']]];
+function pollPad(){if(!navigator.getGamepads)return;let gps;try{gps=navigator.getGamepads();}catch(_){return;}
+  const now={};let any=false;padAxis.on=false;
+  for(const gp of gps){if(!gp||!gp.connected)continue;
+    for(const [b,codes] of PAD_MAP){const bt=gp.buttons[b];if(bt&&(bt.pressed||bt.value>0.5))codes.forEach(c=>now[c]=true);}
+    const ax=gp.axes[0]||0,ay=gp.axes[1]||0,m=Math.hypot(ax,ay);
+    if(m>0.25){const k=Math.min(1,(m-0.25)/0.65)/m;padAxis.x=ax*k;padAxis.y=ay*k;padAxis.on=true;
+      if(ax<-0.5)now.ArrowLeft=true;if(ax>0.5)now.ArrowRight=true;if(ay<-0.5)now.ArrowUp=true;if(ay>0.5)now.ArrowDown=true;}}
+  for(const c in now){if(!padPrev[c]){if(!keys[c])pressed[c]=true;keys[c]=true;any=true;}}
+  for(const c in padPrev){if(!now[c])keys[c]=false;}
+  for(const c in padPrev)delete padPrev[c];Object.assign(padPrev,now);
+  if(any||padAxis.on){usePad=true;isTouch=false;}
+  if(any)initAudio();}
+function padRumble(ms,strong){try{for(const gp of navigator.getGamepads()){if(gp&&gp.vibrationActuator&&gp.vibrationActuator.playEffect)
+  gp.vibrationActuator.playEffect('dual-rumble',{duration:ms,strongMagnitude:strong,weakMagnitude:Math.min(1,strong+0.2)}).catch(()=>{});}}catch(_){}}
 addEventListener('blur',()=>{for(const k in keys)keys[k]=false;});
 const stick={id:null,ox:0,oy:0,x:0,y:0,dx:0,dy:0};let shotPtr=new Set(),tapQueue=[];
 function btnPos(){
@@ -208,7 +232,7 @@ function btnPos(){
 }
 function inC(p,x,y){return Math.hypot(p.x-x,p.y-y)<=p.r+8;}
 cv.addEventListener('pointerdown',e=>{
-  e.preventDefault();try{cv.focus({preventScroll:true});}catch(_){}isTouch=e.pointerType==='touch';initAudio();const x=e.clientX,y=e.clientY,bp=btnPos();
+  e.preventDefault();try{cv.focus({preventScroll:true});}catch(_){}isTouch=e.pointerType==='touch';if(isTouch)usePad=false;initAudio();const x=e.clientX,y=e.clientY,bp=btnPos();
   tapQueue.push({x,y});
   if(state==='boot')goFull();
   if(paused){pauseTaps.push({x,y});return;}
@@ -354,7 +378,7 @@ function spawn(type,x,y,o){const d=ENEMY_DEF[type];const s=ST[stageNo];
 function stageInfo(n){return loop2?{a:'ANOTHER '+n,b:'別時空・'+ST[n].sub}:{a:ST[n].name,b:ST[n].sub};}
 function beginStage(n){stageNo=n;resetField();stageT=0;scriptI=0;SCRIPT=buildScript(n);checkpoint='stage';
   if(n===1)form='L';else if(n===2)form='H';
-  const si=stageInfo(n);banner={t:0,a:si.a,b:si.b+(n===3?(isTouch?'　換装ボタンで形態切替':'　Cキーで形態切替'):'')};
+  const si=stageInfo(n);banner={t:0,a:si.a,b:si.b+(n===3?(isTouch?'　換装ボタンで形態切替':(usePad?'　X/Yボタンで形態切替':'　Cキーで形態切替')):'')};
   playMusic(ST[n].music);preloadMusic(ST[n].bossMusic);setState('stage');}
 function beginBoss(n){stageNo=n;if(!P)resetField();enemies=[];eshots=[];checkpoint='boss';if(n===2)form='H';if(n===1)form='L';
   if(n===1)boss={kind:1,x:W+90,y:PH/2,hp:640,max:640};
@@ -415,15 +439,15 @@ function drawRift(){
     for(let i=0;i<14;i++){ctx.fillStyle='rgba(220,200,255,0.25)';ctx.fillRect(0,Math.random()*H,W,1+Math.random()*4);}
     if(k<0.3){ctx.fillStyle='rgba(255,255,255,'+(1-k/0.3)+')';ctx.fillRect(0,0,W,H);}}
   if(t>=21.6){ctx.fillStyle='#05020e';ctx.fillRect(0,0,W,H);const a=Math.min(1,(t-21.6)*2);ctx.globalAlpha=a;txtS('2ND MISSION',W/2,H/2-6,26,'#ffe6c8','center');txt('― ANOTHER TIME ―',W/2,H/2+18,12,'#c8a0ff','center');ctx.globalAlpha=1;}
-  txt(isTouch?'タップでスキップ':'Enter / S：スキップ',W-8,H-8,9,'rgba(200,208,236,0.7)','right');}
+  txt(isTouch?'タップでスキップ':(usePad?'A / BACK：スキップ':'Enter / S：スキップ'),W-8,H-8,9,'rgba(200,208,236,0.7)','right');}
 function startEnding(t){endType=t;stopMusic();playMusic('final');if(t==='true'&&!unlocked2){unlocked2=true;sv('fantaryon_loop2','1');}setState('ending');}
 function withTutorial(next){if(tutDone)next();else startTutorial(next);}
 
 // ===== チュートリアル =====
 const TUT_TEXT=[
-  ()=>'まずは動いてみろ。\n'+(isTouch?'画面の左側をなぞると、スティックで動ける。':'矢印キーかWASDで動ける。Shiftで低速移動だ。'),
-  ()=>'次は射撃だ。標的を3つ撃ち落とせ。\n'+(isTouch?'画面の右側を押しっぱなしで連射できる。':'ZキーかSpaceを押しっぱなしで連射できる。'),
-  ()=>'ピンチの時はボムだ。敵の弾をまとめて消せる。\n'+(isTouch?'BOMBボタンを押してみろ。':'Xキーを押してみろ。'),
+  ()=>'まずは動いてみろ。\n'+(isTouch?'画面の左側をなぞると、スティックで動ける。':(usePad?'左スティックか十字キーで動ける。LB・RBで低速移動だ。':'矢印キーかWASDで動ける。Shiftで低速移動だ。')),
+  ()=>'次は射撃だ。標的を3つ撃ち落とせ。\n'+(isTouch?'画面の右側を押しっぱなしで連射できる。':(usePad?'Aボタン（またはRT）を押しっぱなしで連射できる。':'ZキーかSpaceを押しっぱなしで連射できる。')),
+  ()=>'ピンチの時はボムだ。敵の弾をまとめて消せる。\n'+(isTouch?'BOMBボタンを押してみろ。':(usePad?'Bボタンを押してみろ。':'Xキーを押してみろ。')),
   ()=>'下のハートがライフだ。1機につき2回まで被弾に耐えられる。\n0になると1機失う。左の丸が残機だ。',
   ()=>'残機が尽きても、コンティニューはできる。\n……だが、できればしないで帰ってこい。',
   ()=>'訓練終了だ。\n……壊して帰ってくんなよ、ポップ。'];
@@ -446,7 +470,7 @@ function updateTutorial(dt){tut.t+=dt;bgScroll+=dt*0.6;
 
 // ===== ループ =====
 let last=performance.now();
-function loop(now){let dt=Math.min(0.05,(now-last)/1000);last=now;
+function loop(now){let dt=Math.min(0.05,(now-last)/1000);last=now;pollPad();
   const portrait=isTouch&&ch>cw;
   if((pressed.Escape||pressed.KeyP)&&playing()===true)togglePause();else if((pressed.Escape||pressed.KeyP)&&paused)togglePause();
   else if(paused)updatePauseMenu();
@@ -539,6 +563,7 @@ function updatePlayer(dt){
   let mx=(keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0),my=(keys.ArrowDown||keys.KeyS?1:0)-(keys.ArrowUp||keys.KeyW?1:0);
   if(mx||my){const l=Math.hypot(mx,my);mx/=l;my/=l;}
   if(stick.id!==null){mx=stick.dx;my=stick.dy;}
+  if(padAxis.on){mx=padAxis.x;my=padAxis.y;}
   const spd=(keys.ShiftLeft||keys.ShiftRight)?65:130;
   P.x=Math.max(16,Math.min(W-18,P.x+mx*spd*dt));P.y=Math.max(10,Math.min(PH-10,P.y+my*spd*dt));
   P.inv=Math.max(0,P.inv-dt);P.cool-=dt;
@@ -564,14 +589,14 @@ function fire(){
     sfx('laser');
   }
 }
-function useBomb(){if(bombs<=0||!P.alive||bombFX)return;bombs--;if(tut)tut.bombed=true;sfx('bomb');P.inv=Math.max(P.inv,2.0);bombFX={x:P.x,y:P.y,t:0,id:Math.random()};flash=1;shake=1.2;}
+function useBomb(){if(bombs<=0||!P.alive||bombFX)return;bombs--;padRumble(320,0.4);if(tut)tut.bombed=true;sfx('bomb');P.inv=Math.max(P.inv,2.0);bombFX={x:P.x,y:P.y,t:0,id:Math.random()};flash=1;shake=1.2;}
 function updateBomb(dt){if(!bombFX)return;const B=bombFX;B.t+=dt;const R=20+B.t*560;
   if(B.t<1.0){
     eshots=eshots.filter(s=>{if(Math.hypot(s.x-B.x,s.y-B.y)<R){score+=10;parts.push({x:s.x,y:s.y,vx:(Math.random()-0.5)*40,vy:-20-Math.random()*30,t:0,life:0.6,col:'#fff6b0',sz:2});return false;}return true;});
     for(const e of enemies){if(e.type!=='rock'&&e.bombed!==B.id&&Math.hypot(e.x-B.x,e.y-B.y)<R){e.bombed=B.id;hurtEnemy(e,30);}}
     if(boss&&!boss.dead&&!boss.core&&!boss.waiting&&boss.bombed!==B.id&&Math.hypot(boss.x-B.x,boss.y-B.y)<R){boss.bombed=B.id;hurtBoss(60,true);}}
   if(B.t>1.4)bombFX=null;}
-function playerHit(){if(P.inv>0||!P.alive)return;hits++;life--;eshots=eshots.filter(s=>Math.hypot(s.x-P.x,s.y-P.y)>40);
+function playerHit(){if(P.inv>0||!P.alive)return;padRumble(220,0.75);hits++;life--;eshots=eshots.filter(s=>Math.hypot(s.x-P.x,s.y-P.y)>40);
   if(life>0){P.inv=1.6;shake=0.6;flash=0.3;sfx('damage');burst(P.x,P.y,'#ff8a6a',12);return;}
   P.alive=false;P.respawn=1.6;lives--;life=MAX_LIFE;bombs=3;power=Math.max(1,power-1);burst(P.x,P.y,'#ffcf6a',30);sfx('miss');shake=0.8;eshots=[];}
 
@@ -880,8 +905,8 @@ function drawTalk(){
   txt(c.name,106,190,12,c.col);
   const shown=l[1].slice(0,Math.floor(talk.chars)).split('\n');shown.forEach((s,i)=>txt(s,106,212+i*20,13,'#e8eaf2'));
   if(talk.chars>=l[1].length&&Math.floor(gT*2)%2)txt('▼',isTouch?W-24:W-110,254,10,'#f0c86a');
-  box(W-62,8,54,20,'rgba(8,12,40,0.8)','#8a94c4');txt(isTouch?'SKIP':'S:SKIP',W-35,22,10,'#c8d0ec','center');
-  if(!isTouch)txt('Enter / Z：次へ',W-18,254,9,'#9aa6cc','right');
+  box(W-62,8,54,20,'rgba(8,12,40,0.8)','#8a94c4');txt(isTouch?'SKIP':(usePad?'BACK:SKIP':'S:SKIP'),W-35,22,usePad?8:10,'#c8d0ec','center');
+  if(!isTouch)txt((usePad?'A：次へ':'Enter / Z：次へ'),W-18,254,9,'#9aa6cc','right');
 }
 function drawControls(){
   if(!isTouch||!playing())return;ctx.setTransform(dpr,0,0,dpr,0,0);const bp=btnPos();
@@ -1031,7 +1056,7 @@ function drawOpening(){
   }else{const tt=t-OPV.len;drawBackground(ctx,tt,1);
     const z=Math.max(1,3.2-tt*3.5);ctx.save();ctx.translate(W/2,104);ctx.scale(z,z);ctx.globalAlpha=Math.min(1,tt*2.5);txtS('FANTARYON',0,8,46,'#ffe6c8','center');ctx.restore();ctx.globalAlpha=1;
     ctx.fillStyle='rgba(255,255,255,'+Math.max(0,1-tt*1.4)+')';ctx.fillRect(0,0,W,H);}
-  txt(isTouch?'タップでスキップ':'Enter / S：スキップ',W-8,20,9,'rgba(200,208,236,0.7)','right');
+  txt(isTouch?'タップでスキップ':(usePad?'BACK / START：スキップ':'Enter / S：スキップ'),W-8,20,9,'rgba(200,208,236,0.7)','right');
 }
 function lerpCol(a,b,f){return 'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*f)).join(',')+')';}
 
@@ -1090,7 +1115,7 @@ function drawEnding(){
     if(t<2){ctx.fillStyle='rgba(255,255,255,'+Math.max(0,1-t/2)+')';ctx.fillRect(0,0,W,H);}
     if(t>25.5){ctx.fillStyle='rgba(0,0,0,'+Math.min(1,(t-25.5)*1.5)+')';ctx.fillRect(0,0,W,H);const a=Math.min(1,(t-26)*1.5);ctx.globalAlpha=Math.max(0,a);txtS('2ND MISSION COMPLETE',W/2,H/2-4,20,'#ffe6c8','center');txt('― TRUE END ―',W/2,H/2+20,12,'#f0c86a','center');ctx.globalAlpha=1;}
   }
-  txt(isTouch?'タップで次へ':'Enter：次へ　S：スキップ',W-8,22,9,'rgba(200,208,236,0.7)','right');
+  txt(isTouch?'タップで次へ':(usePad?'A：次へ　BACK：スキップ':'Enter：次へ　S：スキップ'),W-8,22,9,'rgba(200,208,236,0.7)','right');
 }
 // ===== スタッフロール・結果 =====
 let credT=0;
@@ -1101,7 +1126,7 @@ function updateCredits(dt){const speed=(keys.KeyZ||keys.Space||keys.Enter||tapQu
 function drawCredits(){ui();drawSpace(ctx,bgScroll,endType==='true'?'space':'space3');ctx.fillStyle='rgba(0,0,0,0.35)';ctx.fillRect(0,0,W,H);
   const t=credT;
   if(t<34){let y=H+10-t*24;for(const [s,size] of CREDITS){if(size){if(y>-20&&y<H+20)txtS(s,W/2,y,size,size>=14?'#ffe6c8':'#c8d0ec','center');y+=size+12;}else y+=12;}
-    txt(isTouch?'長押しで早送り':'Enter/Z 長押しで早送り',W-8,H-8,9,'rgba(200,208,236,0.7)','right');}
+    txt(isTouch?'長押しで早送り':(usePad?'A 長押しで早送り':'Enter/Z 長押しで早送り'),W-8,H-8,9,'rgba(200,208,236,0.7)','right');}
   else{const a=Math.min(1,(t-34)*2);ctx.globalAlpha=a;
     txtS('RESULT',W/2,62,22,'#ffe6c8','center');
     txt('SCORE',150,100,12,'#9aa6cc');txt(String(score).padStart(7,'0'),330,100,14,'#e6e9f4','right');
@@ -1110,7 +1135,7 @@ function drawCredits(){ui();drawSpace(ctx,bgScroll,endType==='true'?'space':'spa
     txt('エンディング',150,172,12,'#9aa6cc');txt(endType==='loop2'?'2ND MISSION COMPLETE':endType==='true'?'TRUE END':'NORMAL END',330,172,13,endType!=='normal'?'#f0c86a':'#c8d6ff','right');
     if(endType==='normal')txt('真エンディング条件：一度もコンティニューせずにラスボスを倒す',W/2,202,10,'#9aa6cc','center');
     if(endType==='true')txt('タイトルに「2ND MISSION」が追加されました',W/2,202,10,'#f0c86a','center');
-    if(t>35.5&&Math.floor(gT*1.6)%2===0)txt(isTouch?'タップでタイトルへ':'Enterキーでタイトルへ',W/2,236,12,'#e6e9f4','center');
+    if(t>35.5&&Math.floor(gT*1.6)%2===0)txt(isTouch?'タップでタイトルへ':(usePad?'Aボタンでタイトルへ':'Enterキーでタイトルへ'),W/2,236,12,'#e6e9f4','center');
     ctx.globalAlpha=1;}
 }
 
@@ -1118,10 +1143,10 @@ function drawCredits(){ui();drawSpace(ctx,bgScroll,endType==='true'?'space':'spa
 function drawTutorial(){
   const text=TUT_TEXT[Math.min(tut.step,TUT_TEXT.length-1)]();
   txtS('TRAINING　'+(Math.min(tut.step,TUT_TEXT.length-1)+1)+' / '+TUT_TEXT.length,10,22,11,'#8affc0');
-  box(W-62,8,54,20,'rgba(8,12,40,0.8)','#8a94c4');txt(isTouch?'SKIP':'S:SKIP',W-35,22,10,'#c8d0ec','center');
+  box(W-62,8,54,20,'rgba(8,12,40,0.8)','#8a94c4');txt(isTouch?'SKIP':(usePad?'BACK:SKIP':'S:SKIP'),W-35,22,usePad?8:10,'#c8d0ec','center');
   box(8,PH-64,W-16,58,'rgba(6,20,16,0.92)','#8affc0');portrait('sgt',12,PH-60,50);txt('ゴンダ軍曹',68,PH-48,10,CHARS.sgt.col);
   text.split('\n').forEach((l,i)=>txt(l,68,PH-32+i*15,11,'#e8f2ea'));
-  if(tut.step>=3&&Math.floor(gT*2)%2)txt(isTouch?'タップで次へ ▼':'Enter／Z で次へ ▼',W-16,PH-10,9,'#f0c86a','right');
+  if(tut.step>=3&&Math.floor(gT*2)%2)txt(isTouch?'タップで次へ ▼':(usePad?'A で次へ ▼':'Enter／Z で次へ ▼'),W-16,PH-10,9,'#f0c86a','right');
   if(tut.step===3){ctx.strokeStyle='#ffe066';ctx.lineWidth=1.5;ctx.strokeRect(2,PH+1,110,HUD-2);txtS('▲ 残機・ライフ',8,PH-70,10,'#ffe066');}
   if(tut.step===0){const p=Math.min(1,tut.moved/180);ctx.fillStyle='#103020';ctx.fillRect(W/2-60,34,120,6);ctx.fillStyle='#8affc0';ctx.fillRect(W/2-60,34,120*p,6);}
 }
@@ -1133,11 +1158,11 @@ function drawSyslog(){ui();ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
     const gx=Math.random()<0.05?(Math.random()-0.5)*6:0;txt(str,60+gx,70+i*24,13,i===2?'#ff8a8a':'#8affb0');}
   if(t>5.6&&Math.floor(gT*3)%2)txt('_',60,70+SYSLOG.length*24,13,'#8affb0');
   if(Math.random()<0.08){ctx.fillStyle='rgba(140,255,180,0.15)';ctx.fillRect(0,Math.random()*H,W,2+Math.random()*6);}
-  if(t>1.2)txt(isTouch?'タップで次へ':'Enter：次へ',W-10,H-10,9,'#4a7a5a','right');}
+  if(t>1.2)txt(isTouch?'タップで次へ':(usePad?'A：次へ':'Enter：次へ'),W-10,H-10,9,'#4a7a5a','right');}
 
 function drawPauseMenu(){ctx.fillStyle='rgba(4,6,20,0.75)';ctx.fillRect(0,0,W,H);txtS('PAUSE',W/2,108,28,'#e6e9f4','center');
   for(let i=0;i<2;i++){const r=pauseBtnRect(i),on=i===pauseIdx;box(r.x,r.y,r.w,r.h,on?'rgba(255,180,110,0.25)':'rgba(8,12,40,0.9)',on?'#ffb26a':'#8a94c4');txt(PAUSE_ITEMS[i],W/2,r.y+15,12,on?'#ffffff':'#c8d0ec','center');}
-  txt(isTouch?'ボタンをタップ':'↑↓：選択　Enter：決定　Esc：再開',W/2,206,9,'#9aa6cc','center');}
+  txt(isTouch?'ボタンをタップ':(usePad?'↑↓：選択　A：決定　START：再開':'↑↓：選択　Enter：決定　Esc：再開'),W/2,206,9,'#9aa6cc','center');}
 
 // ===== 描画本体 =====
 function clipGame(){ctx.save();ctx.beginPath();ctx.rect(ox*dpr,oy*dpr,W*sc*dpr,H*sc*dpr);ctx.clip();}
@@ -1145,7 +1170,7 @@ function render(isPortrait){
   ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#050814';ctx.fillRect(0,0,cv.width,cv.height);
   if(isPortrait){ctx.setTransform(dpr,0,0,dpr,0,0);txt('端末を横向きにしてください',cw/2,ch/2,18,'#e6e9f4','center','middle');txt('このゲームは横画面専用です',cw/2,ch/2+30,14,'#9aa6cc','center','middle');return;}
   if(state==='boot'){ui();ctx.fillStyle='#0b1236';ctx.fillRect(0,0,W,H);ctx.imageSmoothingEnabled=true;if(IMG.logo.complete)ctx.drawImage(IMG.logo,W/2-150,40,300,150);
-    if(Math.floor(gT*1.6)%2===0)txt(isTouch?'画面をタップしてください':'クリック または Enterキーでスタート',W/2,226,13,'#e6e9f4','center');txt('音が出ます',W/2,246,9,'#9aa6cc','center');return;}
+    if(Math.floor(gT*1.6)%2===0)txt(isTouch?'画面をタップしてください':(usePad?'Aボタンでスタート':'クリック または Enterキーでスタート'),W/2,226,13,'#e6e9f4','center');txt('音が出ます',W/2,246,9,'#9aa6cc','center');return;}
   if(state==='opening'){clipGame();drawOpening();ctx.restore();return;}
   if(state==='ending'){clipGame();drawEnding();ctx.restore();return;}
   if(state==='rift'){clipGame();drawRift();ctx.restore();return;}
@@ -1169,7 +1194,7 @@ function render(isPortrait){
     const items=titleItems();
     for(let i=0;i<items.length;i++){const y=142+i*17,on=i===titleIdx;if(on){ctx.fillStyle='rgba(255,180,110,0.2)';ctx.fillRect(150,y-13,180,16);ctx.strokeStyle='#ffb26a';ctx.lineWidth=1;ctx.strokeRect(150.5,y-12.5,179,15);}
       txtS((on?'▶ ':'　')+items[i][1],166,y,12,items[i][0]==='loop2'?(on?'#ffe0a0':'#f0c86a'):(on?'#ffffff':'#c8d0ec'));}
-    txtS(isTouch?'選んだ項目をもう一度タップで決定':'↑↓：選択　Enter/Z：決定',W/2,142+items.length*17+4,9,'#b4bedc','center');
+    txtS(isTouch?'選んだ項目をもう一度タップで決定':(usePad?'↑↓：選択　A：決定':'↑↓：選択　Enter/Z：決定'),W/2,142+items.length*17+4,9,'#b4bedc','center');
     if(isIOS&&!standalone)txtS('共有メニューから「ホーム画面に追加」すると全画面で遊べます',W/2,232,8,'#f0c86a','center');
     txtS('Game: ottoky studio　／　Music: Romeo Hijo',W/2,248,9,'#dce2f6','center');txtS('© ottoky studio　ver '+VERSION,W/2,261,8,'#b4bedc','center');
     if(titleMsg){ctx.globalAlpha=Math.min(1,(3-titleMsg.t)*2);box(W/2-120,8,240,22,'rgba(8,12,40,0.92)','#f0c86a');txt(titleMsg.text,W/2,23,11,'#f0c86a','center');ctx.globalAlpha=1;}
@@ -1183,14 +1208,14 @@ function render(isPortrait){
       const [k,name,use]=TRACKS[i];const pl=sndPlaying===k;
       txt((pl?'♪ ':(on?'▶ ':'　'))+String(i+1).padStart(2,'0')+'　'+name,84,y,12,pl?'#ffe0a0':(on?'#ffffff':'#c8d0ec'));txt(use,396,y,9,'#9aa6cc','right');}
     if(sndPlaying){for(let i=0;i<24;i++){const h=4+Math.abs(Math.sin(gT*6+i*0.9))*14*Math.abs(Math.sin(gT*2.3+i));ctx.fillStyle='rgba(255,190,110,0.6)';ctx.fillRect(W/2-96+i*8,H-24-h,5,h);}}
-    txt(isTouch?'曲をタップで再生・もう一度で停止':'↑↓：選択　Enter：再生／停止　Esc：戻る',W/2,H-6,9,'#9aa6cc','center');
+    txt(isTouch?'曲をタップで再生・もう一度で停止':(usePad?'↑↓：選択　A：再生／停止　B：戻る':'↑↓：選択　Enter：再生／停止　Esc：戻る'),W/2,H-6,9,'#9aa6cc','center');
     return;}
   if(state==='select'){
     ctx.fillStyle='rgba(2,4,20,0.6)';ctx.fillRect(0,0,W,H);
     txtS('STAGE SELECT',W/2,34,18,'#ffe6c8','center');txt('デバッグ用：全ステージ選択可能',W/2,50,9,'#f0c86a','center');
     for(let i=0;i<SEL.length;i++){const y=74+i*20,on=i===selIdx;if(on){ctx.fillStyle='rgba(255,180,110,0.18)';ctx.fillRect(90,y-14,300,19);ctx.strokeStyle='#ffb26a';ctx.lineWidth=1;ctx.strokeRect(90.5,y-13.5,299,18);}
       txt((on?'▶ ':'　')+SEL[i],104,y,12,on?'#ffffff':'#b4bedc');}
-    txt(isTouch?'選んだ項目をもう一度タップで決定':'↑↓：選択　Enter/Z：決定　Esc：戻る',W/2,H-10,9,'#9aa6cc','center');
+    txt(isTouch?'選んだ項目をもう一度タップで決定':(usePad?'↑↓：選択　A：決定　B：戻る':'↑↓：選択　Enter/Z：決定　Esc：戻る'),W/2,H-10,9,'#9aa6cc','center');
     return;}
   if(state==='talk'){drawTalk();return;}
   drawHUD();
@@ -1200,7 +1225,7 @@ function render(isPortrait){
   if(state==='warning'){const on=Math.floor(stateT*4)%2===0;ctx.fillStyle='rgba(200,20,40,'+(on?0.3:0.14)+')';ctx.fillRect(0,96,W,56);if(on){txtS('WARNING',W/2,126,32,'#ffd0d8','center');}txtS(stageNo===3?'中心核の反応が増大中':stageNo===2?'空間の歪みが接近中':'大型の来訪体が接近中',W/2,144,11,'#ffe0e6','center');}
   if(state==='stageclear'){ctx.fillStyle='rgba(4,6,20,0.6)';ctx.fillRect(0,0,W,H);txtS('STAGE '+clearInfo.n+' CLEAR',W/2,100,28,'#ffe6c8','center');txt('クリアボーナス  +'+clearInfo.bonus,W/2,130,12,'#e6e9f4','center');txt('SCORE '+String(score).padStart(7,'0'),W/2,152,13,'#e6e9f4','center');}
   if(state==='gameover'){ctx.fillStyle='rgba(4,6,20,0.7)';ctx.fillRect(0,0,W,H);txt('GAME OVER',W/2,110,30,'#ffd0d8','center');
-    if(stateT>1){txt(isTouch?'タップでコンティニュー':'Enterキーでコンティニュー',W/2,142,12,'#e6e9f4','center');txt('※コンティニューすると真エンディングには進めません',W/2,162,10,'#f0c86a','center');if(!isTouch)txt('Esc / T：タイトルへ',W/2,182,10,'#9aa6cc','center');}}
+    if(stateT>1){txt(isTouch?'タップでコンティニュー':(usePad?'Aボタンでコンティニュー':'Enterキーでコンティニュー'),W/2,142,12,'#e6e9f4','center');txt('※コンティニューすると真エンディングには進めません',W/2,162,10,'#f0c86a','center');if(!isTouch)txt('Esc / T：タイトルへ',W/2,182,10,'#9aa6cc','center');}}
   if(paused)drawPauseMenu();
   drawControls();
 }
