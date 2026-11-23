@@ -8,7 +8,9 @@
  音楽      : Romeo Hijo（Delusion sound track 01）
  スタッフ  : 制作スタジオ ottoky studio／ゲーム制作 おとっきー／シナリオ おとっきー・Romeo Hijo／
              デザイン おとっきー／キャラクター Romeo Hijo／音楽 Romeo Hijo
- 版        : 0.9.3（2026-11-23）ゲームパッド対応（標準配置・アナログ移動・振動・操作説明の切り替え）
+ 版        : 0.9.4（2026-11-23）全ボスに必殺技（技名カットイン）、ANOTHER 1のボスを機械で補修されたマザーベリーに変更、
+             ゲームスタートは1面から、ステージ選択などは隠しデバッグメニュー（630）へ移動、チュートリアルの標的位置を修正
+             0.9.3（2026-11-23）ゲームパッド対応（標準配置・アナログ移動・振動・操作説明の切り替え）
              0.9.2（2026-11-23）オープニングを作り直し（警報をじわじわ、ドラグナー風のカットイン、3人並び）／Androidのバージョン番号を自動採番
              0.9.1（2026-11-23）画像・BGMを別ファイル化（iPhoneのSafari・Chromeで読み込みが途中で切れる問題への対策）／
              空母画像差し替え・甲板シーンの機体を拡大
@@ -37,6 +39,10 @@
              2面 月軌道（Spaceship -Hazelnut-）地形あり／ボス 境界体ボーダーシェル（貝）（Border Line）
              3面 外宇宙（Outer Zone）／ラスボス 中心核フェイタル（クラゲ）（Fatal Command）
              エンディング（Final Decision）、オープニング・タイトル（Ready）
+ ボスの必殺技 : 体力が2/3を切ると最初の必殺技を出し、以後は一定間隔（12〜14秒）で繰り返す。発動時に技名のカットインを表示。
+             1周目 1面「群体放出」追尾弾／2面「真珠螺旋」殻を開いて渦巻き弾／3面「フェイタル・レイ」溜め撃ちビーム
+             2周目 1面「改造キャノン」ビーム＋追尾ミサイル／2面「双螺旋」逆回転の二重渦巻き／3面「ツイン・フェイタルレイ」ビーム2連射
+             もう一人のLOLLIPOP「ミラーバースト」自機そっくりの弾の連射＋全方位弾
  ラスボスの溜め撃ち : 中心核フェイタル（1・2周目共通）は約1.6秒の溜め（予告線と光の収束）のあと、
              口から画面左端まで極太ビームを約1.7秒照射する。2周目の鏡の自分も最終段階で使用する。
  弾の見分け : 自機弾＝黄緑の細長い光弾（白い芯＋尾）／レーザー＝金色の太い帯。敵弾＝丸い弾（1・2面ピンク、3面シアン）に黒縁。
@@ -50,14 +56,17 @@
              ・コンティニューなし：突入命令の直後に少佐が中止を命じ、ボムでコアを破壊 → 真エンディング
                （この流れでは体当たりは無効。ボムが0の場合は1発補給する）
  真エンディング条件 : 一度もコンティニューせずにラスボスを倒すこと（被弾・ミスは条件に含まない）。
- タイトルメニュー : ゲームスタート（→ステージセレクト）／2ND MISSION（解放後のみ）／あそびかた／サウンドトラック
- ステージセレクト : デバッグ用として全ステージ・全ボス・両エンディングを選択可能（2ND MISSIONは表示しない）。
+ タイトルメニュー : ゲームスタート（→1面から。初回はチュートリアル）／2ND MISSION（解放後のみ）／あそびかた／サウンドトラック
+ 隠しデバッグメニュー : タイトルで「630」とキー入力／タイトルロゴを7回連続タップ／ゲームパッドのLB＋RBを押しながらBACK で開く。
+             2ND MISSION解放、初期化（保存データ消去・確認つき）、無敵最強（敵と弾は無効・最大火力・ダメージ3倍、
+             地形と破壊不能の障害物には当たる）、倍速（戦闘中のみ2倍速）、ステージ選択（1・2周目の全ステージ・全ボス・両エンディング）。
+             無敵最強・倍速は重ね掛け可、ONの間は画面右下に表示、保存しない。
  チュートリアル : 初回のSTAGE 1開始時に自動で実施（移動→射撃→ボム→ライフ説明）。以後は「あそびかた」から。スキップ可。
- 2ND MISSION（ANOTHER）: 真エンディング到達で解放（端末内に保存）。タイトルで「630」とキー入力しても解放できる（テスト用）。
+ 2ND MISSION（ANOTHER）: 真エンディング到達で解放（端末内に保存）。隠しデバッグメニューからも解放できる。
              1周目で逃げ延びたマザーベリーを追い、月の裏の時空の裂け目から「別時空の宇宙」へ向かう。
              出撃前会話 → 別時空突入ミニOP（約24秒・無線つき・スキップ可）→ ANOTHER 1〜3。
              別時空は1周目で自機がコアに突入して消えた時間軸。画面の向きと操作は1周目と同じ（自機は左側）。曲と敵は1周目と同じ（色調のみ変化）。
-             1面ボスは同じ個体のマザーベリー（生存個体）で、最初から傷が残っている。
+             1面ボスは逃げ延びたマザーベリーが別時空で機械に補修された「改造個体 マザーベリー」。
              難しさは弾数増加（狙い弾に左右の弾を追加、全方位弾は1.5倍）、全面に天井・床の地形、破壊不能の障害物で上げる。
              ラスボス撃破後に「もう一人のLOLLIPOP」と戦い、後日談エンディング（2ND MISSION COMPLETE）へ。
  サウンドトラック : 全8曲を選んで再生・停止できる。
@@ -99,10 +108,10 @@ canvas{outline:none;position:fixed;inset:0;width:100vw;height:100vh;height:100dv
 <script>
 {
 // ===== 素材 =====
-const ASSET={logo:"assets/logo.jpg",pop:"assets/pop.png",maj:"assets/maj.png",sgt:"assets/sgt.png",space:"assets/space.jpg",space3:"assets/space3.jpg",earth:"assets/earthtex.jpg",moontex:"assets/moontex.jpg",moon:"assets/moon.png",ship_l:"assets/ship_l.png",ship_h:"assets/ship_h.png",ship_shadow:"assets/ship_shadow.png",orb:"assets/orb.png",boss1:"assets/boss1.png",boss2:"assets/boss2.png",boss3:"assets/boss3.png",boss1_m:"assets/boss1_m.png",boss2_m:"assets/boss2_m.png",boss3_m:"assets/boss3_m.png",boss2_closed:"assets/boss2_closed.png",boss2_m_closed:"assets/boss2_m_closed.png",boss4:"assets/boss4.png",carrier2:"assets/carrier2.png",deck2:"assets/deck2.jpg",e_jelly:"assets/e_jelly.png",e_jelly_2:"assets/e_jelly_2.png",e_jelly_3:"assets/e_jelly_3.png",e_jelly_m:"assets/e_jelly_m.png",e_chick:"assets/e_chick.png",e_chick_2:"assets/e_chick_2.png",e_chick_3:"assets/e_chick_3.png",e_chick_m:"assets/e_chick_m.png",e_jellyfish:"assets/e_jellyfish.png",e_jellyfish_2:"assets/e_jellyfish_2.png",e_jellyfish_3:"assets/e_jellyfish_3.png",e_jellyfish_m:"assets/e_jellyfish_m.png",e_puffer:"assets/e_puffer.png",e_puffer_2:"assets/e_puffer_2.png",e_puffer_3:"assets/e_puffer_3.png",e_puffer_m:"assets/e_puffer_m.png",e_mini:"assets/e_mini.png",e_mini_2:"assets/e_mini_2.png",e_mini_3:"assets/e_mini_3.png",e_mini_m:"assets/e_mini_m.png",e_slug:"assets/e_slug.png",e_slug_2:"assets/e_slug_2.png",e_slug_3:"assets/e_slug_3.png",e_slug_m:"assets/e_slug_m.png",e_flower:"assets/e_flower.png",e_flower_2:"assets/e_flower_2.png",e_flower_3:"assets/e_flower_3.png",e_flower_m:"assets/e_flower_m.png"};
+const ASSET={logo:"assets/logo.jpg",pop:"assets/pop.png",maj:"assets/maj.png",sgt:"assets/sgt.png",space:"assets/space.jpg",space3:"assets/space3.jpg",earth:"assets/earthtex.jpg",moontex:"assets/moontex.jpg",moon:"assets/moon.png",ship_l:"assets/ship_l.png",ship_h:"assets/ship_h.png",ship_shadow:"assets/ship_shadow.png",orb:"assets/orb.png",boss1:"assets/boss1.png",boss2:"assets/boss2.png",boss3:"assets/boss3.png",boss1_m:"assets/boss1_m.png",boss2_m:"assets/boss2_m.png",boss3_m:"assets/boss3_m.png",boss2_closed:"assets/boss2_closed.png",boss2_m_closed:"assets/boss2_m_closed.png",boss4:"assets/boss4.png",boss1_x:"assets/boss1_x.png",carrier2:"assets/carrier2.png",deck2:"assets/deck2.jpg",e_jelly:"assets/e_jelly.png",e_jelly_2:"assets/e_jelly_2.png",e_jelly_3:"assets/e_jelly_3.png",e_jelly_m:"assets/e_jelly_m.png",e_chick:"assets/e_chick.png",e_chick_2:"assets/e_chick_2.png",e_chick_3:"assets/e_chick_3.png",e_chick_m:"assets/e_chick_m.png",e_jellyfish:"assets/e_jellyfish.png",e_jellyfish_2:"assets/e_jellyfish_2.png",e_jellyfish_3:"assets/e_jellyfish_3.png",e_jellyfish_m:"assets/e_jellyfish_m.png",e_puffer:"assets/e_puffer.png",e_puffer_2:"assets/e_puffer_2.png",e_puffer_3:"assets/e_puffer_3.png",e_puffer_m:"assets/e_puffer_m.png",e_mini:"assets/e_mini.png",e_mini_2:"assets/e_mini_2.png",e_mini_3:"assets/e_mini_3.png",e_mini_m:"assets/e_mini_m.png",e_slug:"assets/e_slug.png",e_slug_2:"assets/e_slug_2.png",e_slug_3:"assets/e_slug_3.png",e_slug_m:"assets/e_slug_m.png",e_flower:"assets/e_flower.png",e_flower_2:"assets/e_flower_2.png",e_flower_3:"assets/e_flower_3.png",e_flower_m:"assets/e_flower_m.png"};
 const MUSIC={ready:"assets/m_ready.mp3",lollipop:"assets/m_lollipop.mp3",first:"assets/m_first.mp3",hazelnut:"assets/m_hazelnut.mp3",border:"assets/m_border.mp3",outer:"assets/m_outer.mp3",fatal:"assets/m_fatal.mp3",final:"assets/m_final.mp3"};
 const FONT="'DotGothic16','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif";
-const VERSION='0.9.3';
+const VERSION='0.9.4';
 
 // ===== 画面 =====
 const W=480,H=270,HUD=18,PH=H-HUD;
@@ -207,7 +216,7 @@ addEventListener('keyup',e=>{keys[e.code]=false;});
 // 十字キー/左スティック＝移動（スティックはアナログ）、A＝ショット・決定、RT＝ショット、B＝ボム・戻る、X/Y＝換装、
 // LB/RB/LT＝低速、BACK＝会話スキップ、START＝一時停止。被弾とボムで振動（対応パッド・ブラウザのみ）。
 let usePad=false;const padAxis={x:0,y:0,on:false};const padPrev={};
-const PAD_MAP=[[0,['KeyZ']],[1,['KeyX','Backspace']],[2,['KeyC']],[3,['KeyC']],[4,['ShiftLeft']],[5,['ShiftLeft']],[6,['ShiftLeft']],[7,['KeyZ']],
+const PAD_MAP=[[0,['KeyZ']],[1,['KeyX','Backspace']],[2,['KeyC']],[3,['KeyC']],[4,['ShiftLeft','PadLB']],[5,['ShiftLeft','PadRB']],[6,['ShiftLeft']],[7,['KeyZ']],
   [8,['KeyS']],[9,['Escape']],[12,['ArrowUp']],[13,['ArrowDown']],[14,['ArrowLeft']],[15,['ArrowRight']]];
 function pollPad(){if(!navigator.getGamepads)return;let gps;try{gps=navigator.getGamepads();}catch(_){return;}
   const now={};let any=false;padAxis.on=false;
@@ -257,6 +266,7 @@ function goFull(){
 let state='boot',stateT=0,paused=false,gT=0;
 let P,shots,enemies,eshots,items,parts,boss,score,lives,life,bombs,power,kills,hits,continues,stageNo=1,form='L',formCool=0,stageT,scriptI,SCRIPT,lastEnemyName,radio,radioQ,banner,flash,shake,nextAfterTalk,talk,checkpoint,bombFX,bgScroll=0,endType='normal',orbs,clearInfo;
 const MAX_LIFE=2;
+const DBG={inv:false,fast:false};let dbgIdx=0,dbgConfirm=false;const logoTap={n:0,t:0};
 let loop2=false,unlocked2=false,tutDone=false,titleIdx=0,digitBuf='',titleMsg=null,tut=null,sndIdx=0,sndPlaying=null,syslogNext=null;
 function ld(k){try{return localStorage.getItem(k);}catch(e){return null;}}
 function sv(k,v){try{localStorage.setItem(k,v);}catch(e){}}
@@ -292,7 +302,7 @@ const ST={
   3:{name:'STAGE 3',sub:'外宇宙',music:'outer',bossMusic:'fatal',tint:'_3',len:94,hp:2,spd:1.28,bspd:1.25},
 };
 const BOSS_NAME={1:'群体 マザーベリー',2:'境界体 ボーダーシェル',3:'中心核 フェイタル',4:'もう一人のLOLLIPOP'};
-const BOSS_NAME_M={1:'群体 マザーベリー（生存個体）',2:'別時空体 ボーダーシェル',3:'別時空体 フェイタル',4:'もう一人のLOLLIPOP'};
+const BOSS_NAME_M={1:'改造個体 マザーベリー',2:'別時空体 ボーダーシェル',3:'別時空体 フェイタル',4:'もう一人のLOLLIPOP'};
 function bossName(k){return (loop2?BOSS_NAME_M:BOSS_NAME)[k];}
 // 面の途中の無線（[秒, 話者, 本文]）。{K}は撃墜数に置き換える
 const RADIO={
@@ -306,7 +316,7 @@ const RADIO_M={
   3:[[6,'pop','ここは……外宇宙の、向こう側か。'],[24,'sgt','ポップ。何があっても、\n俺はお前の整備士だ。'],[28.5,'pop','……はい。'],[56,'echo','僕は、この先で待ってるよ。']],
 };
 const BOSS_RADIO={1:[['pop','でけえ……！',2.4],['maj','大型反応を確認。迎撃しろ。']],2:[['echo','……ポップ……こっちへ……',3],['maj','前方に空間の歪み。\n目標と断定、撃破しろ。']],3:[['maj','中心核を確認。\n全兵装の使用を許可する。']]};
-const BOSS_RADIO_M={1:[['pop','あいつ……あの時の！',2.6],['maj','前回の作戦で撃破を確認した個体だ。\n……逃げ延びていたか。']],2:[['echo','……もう少しだよ。',2.6],['maj','別時空体を確認。撃破しろ。']],3:[['maj','別時空の中心核を確認。\n……行け、LOLLIPOP。']]};
+const BOSS_RADIO_M={1:[['pop','あいつ……あの時の！',2.6],['maj','前回の作戦で撃破を確認した個体だ。\n……逃げ延びていたか。',3],['sgt','なんだありゃ……機械で継ぎ接ぎしてやがる。']],2:[['echo','……もう少しだよ。',2.6],['maj','別時空体を確認。撃破しろ。']],3:[['maj','別時空の中心核を確認。\n……行け、LOLLIPOP。']]};
 function buildScript(n){
   const S=[];const at=(t,f)=>S.push({t,f});
   const line=(type,c,y,gap,t0)=>{for(let i=0;i<c;i++)at(t0+i*gap,()=>spawn(type,W+16,y));};
@@ -403,7 +413,9 @@ function startFromSelect(i){
   resetRun();loop2=false;
   const go=[()=>withTutorial(()=>startTalk('intro1',()=>beginStage(1))),()=>{power=2;startTalk('intro2',()=>beginStage(2));},()=>{power=2;startTalk('intro3',()=>beginStage(3));},
     ()=>{resetField();beginBoss(1);},()=>{power=2;resetField();beginBoss(2);},()=>{power=3;resetField();beginBoss(3);},
-    ()=>{resetField();startEnding('normal');},()=>{resetField();startEnding('true');}][i];
+    ()=>{resetField();startEnding('normal');},()=>{resetField();startEnding('true');},
+    ()=>{loop2=true;power=2;beginStage(1);},()=>{loop2=true;power=2;beginStage(2);},()=>{loop2=true;power=2;beginStage(3);},
+    ()=>{loop2=true;power=2;resetField();beginBoss(1);},()=>{loop2=true;power=2;resetField();beginBoss(2);},()=>{loop2=true;power=3;resetField();beginBoss(3);},()=>{loop2=true;power=3;resetField();beginBoss4();}][i];
   go();
 }
 function startLoop2(){resetRun();loop2=true;power=2;startTalk('m_intro',()=>{riftDone=false;setState('rift');});}
@@ -454,7 +466,7 @@ const TUT_TEXT=[
 function startTutorial(next){resetField();loop2=false;stageNo=1;form='L';lives=3;life=MAX_LIFE;bombs=3;P.inv=1e9;P.x=120;
   tut={step:0,t:0,moved:0,next,lx:P.x,ly:P.y};setState('tutorial');playMusic('ready');}
 function tutNextStep(){tut.step++;tut.t=0;sfx('decide');
-  if(tut.step===1){for(const y of [70,135,200])spawn('target',380,y);}
+  if(tut.step===1){for(const y of [48,98,148])spawn('target',380,y);}  // 会話ウィンドウ（PH-64より下）に重ならない高さ
   if(tut.step>=TUT_TEXT.length){tutDone=true;sv('fantaryon_tut','1');const n=tut.next;tut=null;resetField();n();}}
 function updateTutorial(dt){tut.t+=dt;bgScroll+=dt*0.6;
   if(pressed.KeyS||pressed.Escape||tapQueue.some(t=>{const g=toGame(t.x,t.y);return g.x>W-70&&g.y<30;})){tut.step=TUT_TEXT.length-1;tutNextStep();return;}
@@ -474,8 +486,9 @@ function loop(now){let dt=Math.min(0.05,(now-last)/1000);last=now;pollPad();
   const portrait=isTouch&&ch>cw;
   if((pressed.Escape||pressed.KeyP)&&playing()===true)togglePause();else if((pressed.Escape||pressed.KeyP)&&paused)togglePause();
   else if(paused)updatePauseMenu();
-  if(!paused&&!portrait)update(dt);
-  render(portrait);pressed={};requestAnimationFrame(loop);}
+  if(DBG.inv&&P&&['stage','boss','warning','tutorial'].includes(state)){power=3;bombs=Math.max(bombs,3);}
+  if(!paused&&!portrait){update(dt);if(DBG.fast&&['stage','boss','warning'].includes(state)){const pv=pressed;pressed={};update(dt);pressed=pv;}}
+  render(portrait);if(DBG.inv||DBG.fast){ui();txt('DEBUG'+(DBG.inv?'：無敵最強':'')+(DBG.fast?'：倍速':''),W-4,PH-4,8,'#ff7a7a','right');}pressed={};requestAnimationFrame(loop);}
 function anyTap(){return tapQueue.length>0||pressed.Enter||pressed.NumpadEnter||pressed.Space||pressed.KeyZ||pressed.KeyJ;}
 let pauseIdx=0,pauseTaps=[];
 const PAUSE_ITEMS=['ゲームを再開','タイトルへ戻る'];
@@ -494,32 +507,50 @@ function togglePause(){if(state==='stage'||state==='boss'||state==='warning'||st
 const OPV_LEN=57.1,OP_LEN=OPV_LEN+2.6;
 const OP_CUES=[[18.5,'select'],[20.0,'select'],[21.5,'select'],[25.7,'warn'],[28.85,'whoosh'],[29.25,'flash'],[32.9,'whoosh'],[35.9,'whoosh'],[36.9,'lock'],
   [40.1,'whoosh'],[45.4,'whoosh'],[47.9,'whoosh'],[52.7,'whoosh'],[53.15,'whoosh'],[53.6,'whoosh'],[57.1,'flash']].map(q=>[q[0],q[1],false]);let opWhoosh=false,opFlash=false,opSep=false,opFlash2=false,selIdx=0;
-const SEL=['STAGE 1　地球周回軌道','STAGE 2　月軌道','STAGE 3　外宇宙','BOSS 1　群体 マザーベリー','BOSS 2　境界体 ボーダーシェル','BOSS 3　中心核 フェイタル（ラスボス）','ENDING　通常エンディング','ENDING　真エンディング'];
+const SEL=['STAGE 1　地球周回軌道','STAGE 2　月軌道','STAGE 3　外宇宙','BOSS 1　群体 マザーベリー','BOSS 2　境界体 ボーダーシェル','BOSS 3　中心核 フェイタル（ラスボス）','ENDING　通常エンディング','ENDING　真エンディング',
+  'ANOTHER 1','ANOTHER 2','ANOTHER 3','ANOTHER BOSS 1　改造個体 マザーベリー','ANOTHER BOSS 2　別時空体 ボーダーシェル','ANOTHER BOSS 3　別時空体 フェイタル','ANOTHER LAST　もう一人のLOLLIPOP'];
 const TRACKS=[['ready','Ready','オープニング／タイトル'],['lollipop','Spaceship -Lollipop-','1面'],['first','First Approach','1面ボス'],['hazelnut','Spaceship -Hazelnut-','2面'],['border','Border Line','2面ボス'],['outer','Outer Zone','3面'],['fatal','Fatal Command','ラスボス'],['final','Final Decision','エンディング']];
+function dbgItems(){return [['unlock','2ND MISSION を解放'+(unlocked2?'（解放済み）':'')],['reset','初期化（保存データを消去）'+(dbgConfirm?' ← もう一度で実行':'')],
+  ['inv','無敵最強：'+(DBG.inv?'ON':'OFF')],['fast','倍速：'+(DBG.fast?'ON':'OFF')],['select','ステージ選択'],['back','タイトルへ戻る']];}
 function titleItems(){const a=[['start','ゲームスタート']];if(unlocked2)a.push(['loop2','2ND MISSION']);a.push(['howto','あそびかた']);a.push(['sound','サウンドトラック']);return a;}
 addEventListener('keydown',e=>{if(state!=='title')return;const m=e.code.match(/^(?:Digit|Numpad)(\d)$/);if(!m)return;digitBuf=(digitBuf+m[1]).slice(-3);
-  if(digitBuf==='630'){digitBuf='';if(!unlocked2){unlocked2=true;sv('fantaryon_loop2','1');}titleMsg={t:0,text:'2ND MISSION が解放されました'};sfx('item');}});
+  if(digitBuf==='630'){digitBuf='';sfx('item');dbgIdx=0;dbgConfirm=false;setState('debug');}});
 function menuNav(n,idx){if(pressed.ArrowDown||pressed.KeyS){sfx('select');return (idx+1)%n;}if(pressed.ArrowUp||pressed.KeyW){sfx('select');return (idx+n-1)%n;}return idx;}
 function menuTap(n,y0,step,x0,x1){for(const t of tapQueue){const g=toGame(t.x,t.y);for(let i=0;i<n;i++){const y=y0+i*step;if(g.x>x0&&g.x<x1&&g.y>y-14&&g.y<y+5)return i;}}return -1;}
 function decideKey(){return pressed.Enter||pressed.NumpadEnter||pressed.KeyZ||pressed.Space||pressed.KeyJ;}
 function update(dt){
-  gT+=dt;stateT+=dt;if(titleMsg){titleMsg.t+=dt;if(titleMsg.t>3)titleMsg=null;}
+  gT+=dt;stateT+=dt;if(titleMsg){titleMsg.t+=dt;if(titleMsg.t>3)titleMsg=null;}if(spCut)spCut.t+=dt;
   if(state==='boot'){bgScroll+=dt;if(anyTap()){initAudio();playMusic('ready');OP_CUES.forEach(q=>q[2]=false);setState('opening');}return;}
   if(state==='opening'){bgScroll+=dt;
     for(const q of OP_CUES){if(!q[2]&&stateT>q[0]){q[2]=true;sfx(q[1]);}}
     if(stateT>OP_LEN||(stateT>0.5&&(anyTap()||pressed.KeyS||pressed.Escape))){setState('title');}return;}
   if(state==='title'){bgScroll+=dt;if(curName!=='ready')playMusic('ready');
     const items=titleItems();titleIdx=Math.min(titleIdx,items.length-1);
+    if(keys.PadLB&&keys.PadRB&&pressed.KeyS){sfx('item');dbgIdx=0;dbgConfirm=false;setState('debug');return;}
+    for(const t of tapQueue){const g=toGame(t.x,t.y);if(g.y>50&&g.y<116&&g.x>W/2-150&&g.x<W/2+150){if(gT-logoTap.t>1.2)logoTap.n=0;logoTap.n++;logoTap.t=gT;
+      if(logoTap.n>=7){logoTap.n=0;tapQueue=[];sfx('item');dbgIdx=0;dbgConfirm=false;setState('debug');return;}}}
     if(stateT>0.3){titleIdx=menuNav(items.length,titleIdx);
       const ti=menuTap(items.length,142,17,150,330);let go=-1;if(ti>=0){if(ti===titleIdx)go=ti;else{titleIdx=ti;sfx('select');}}
       if(decideKey())go=titleIdx;
       if(go>=0){sfx('decide');const k=items[go][0];
-        if(k==='start')setState('select');else if(k==='loop2')startLoop2();else if(k==='howto')startTutorial(()=>{setState('title');});else{sndIdx=0;setState('sound');}}}
+        if(k==='start')startFromSelect(0);else if(k==='loop2')startLoop2();else if(k==='howto')startTutorial(()=>{setState('title');});else{sndIdx=0;setState('sound');}}}
     tapQueue=[];return;}
+  if(state==='debug'){bgScroll+=dt;const it=dbgItems();dbgIdx=menuNav(it.length,dbgIdx);
+    if(pressed.Escape||pressed.Backspace){setState('title');return;}
+    const ti=menuTap(it.length,84,18,110,370);let go=-1;if(ti>=0){if(ti===dbgIdx)go=ti;else{dbgIdx=ti;sfx('select');}}
+    if(decideKey())go=dbgIdx;tapQueue=[];
+    if(go>=0){const k=it[go][0];sfx('decide');if(k!=='reset')dbgConfirm=false;
+      if(k==='unlock'){unlocked2=true;sv('fantaryon_loop2','1');titleMsg={t:0,text:'2ND MISSION を解放しました'};}
+      else if(k==='reset'){if(!dbgConfirm){dbgConfirm=true;titleMsg={t:0,text:'もう一度決定すると初期化します'};}
+        else{dbgConfirm=false;for(const key of ['fantaryon_loop2','fantaryon_tut','fantaryon_loop2clear']){try{localStorage.removeItem(key);}catch(_){}}
+          unlocked2=false;tutDone=false;titleMsg={t:0,text:'保存データを初期化しました'};}}
+      else if(k==='inv')DBG.inv=!DBG.inv;else if(k==='fast')DBG.fast=!DBG.fast;
+      else if(k==='select'){selIdx=0;setState('select');}else setState('title');}
+    return;}
   if(state==='select'){bgScroll+=dt;
     selIdx=menuNav(SEL.length,selIdx);
-    if(pressed.Escape||pressed.Backspace){setState('title');return;}
-    const ti=menuTap(SEL.length,74,20,90,390);if(ti>=0){if(ti===selIdx){sfx('decide');startFromSelect(ti);return;}selIdx=ti;sfx('select');}
+    if(pressed.Escape||pressed.Backspace){setState('debug');return;}
+    const ti=menuTap(SEL.length,62,13,90,390);if(ti>=0){if(ti===selIdx){sfx('decide');startFromSelect(ti);return;}selIdx=ti;sfx('select');}
     tapQueue=[];if(decideKey()){sfx('decide');startFromSelect(selIdx);}return;}
   if(state==='sound'){bgScroll+=dt;
     sndIdx=menuNav(TRACKS.length+1,sndIdx);
@@ -565,12 +596,12 @@ function updatePlayer(dt){
   if(stick.id!==null){mx=stick.dx;my=stick.dy;}
   if(padAxis.on){mx=padAxis.x;my=padAxis.y;}
   const spd=(keys.ShiftLeft||keys.ShiftRight)?65:130;
-  P.x=Math.max(16,Math.min(W-18,P.x+mx*spd*dt));P.y=Math.max(10,Math.min(PH-10,P.y+my*spd*dt));
+  P.x=Math.max(16,Math.min(tut?320:W-18,P.x+mx*spd*dt));  // チュートリアル中は標的（x=380）より前に出ないP.y=Math.max(10,Math.min(PH-10,P.y+my*spd*dt));
   P.inv=Math.max(0,P.inv-dt);P.cool-=dt;
   // オプション（追従）
   for(let i=0;i<2;i++){const tx=P.x-6,ty=P.y+(i?15:-15);orbs[i].x+=(tx-orbs[i].x)*Math.min(1,dt*10);orbs[i].y+=(ty-orbs[i].y)*Math.min(1,dt*10);}
   // 地形との接触
-  if(terrainAmp()>0&&P.inv<=0){if(P.y-5<ceilY(P.x)||P.y+5>floorY(P.x)){playerHit();P.y=corridorY(P.y,P.x);}}
+  if(terrainAmp()>0&&P.inv<=0){if(P.y-5<ceilY(P.x)||P.y+5>floorY(P.x)){playerHit(true);P.y=corridorY(P.y,P.x);}}
   if(boss&&boss.core){if(pressed.KeyX||pressed.KeyK||pressed.Bomb)useBomb();return;}
   const firing=keys.KeyZ||keys.Space||keys.KeyJ||shotPtr.size>0;
   if(firing&&P.cool<=0){fire();}
@@ -596,7 +627,7 @@ function updateBomb(dt){if(!bombFX)return;const B=bombFX;B.t+=dt;const R=20+B.t*
     for(const e of enemies){if(e.type!=='rock'&&e.bombed!==B.id&&Math.hypot(e.x-B.x,e.y-B.y)<R){e.bombed=B.id;hurtEnemy(e,30);}}
     if(boss&&!boss.dead&&!boss.core&&!boss.waiting&&boss.bombed!==B.id&&Math.hypot(boss.x-B.x,boss.y-B.y)<R){boss.bombed=B.id;hurtBoss(60,true);}}
   if(B.t>1.4)bombFX=null;}
-function playerHit(){if(P.inv>0||!P.alive)return;padRumble(220,0.75);hits++;life--;eshots=eshots.filter(s=>Math.hypot(s.x-P.x,s.y-P.y)>40);
+function playerHit(wall){if(DBG.inv&&!wall)return;if(P.inv>0||!P.alive)return;padRumble(220,0.75);hits++;life--;eshots=eshots.filter(s=>Math.hypot(s.x-P.x,s.y-P.y)>40);
   if(life>0){P.inv=1.6;shake=0.6;flash=0.3;sfx('damage');burst(P.x,P.y,'#ff8a6a',12);return;}
   P.alive=false;P.respawn=1.6;lives--;life=MAX_LIFE;bombs=3;power=Math.max(1,power-1);burst(P.x,P.y,'#ffcf6a',30);sfx('miss');shake=0.8;eshots=[];}
 
@@ -615,14 +646,14 @@ function updateEnemies(dt){const s=ST[stageNo],sp=s.spd,bs=s.bspd;
     else if(e.type==='flower'){if(e.t<e.wait){e.x-=50*dt;}else{if(!e.dash){e.dash=true;const a=Math.atan2(P.y-e.y,P.x-e.x);e.vx=Math.cos(a)*170*sp;e.vy=Math.sin(a)*170*sp;}e.x+=e.vx*dt;e.y+=e.vy*dt;}}
     else if(e.type==='shadow'){const tx=(boss?boss.x:W)-110-(e.idx||0)*34;e.x+=(tx-e.x)*Math.min(1,dt*2);const ty=PH-P.y+(e.idx?24:0);e.y+=(Math.max(14,Math.min(PH-14,ty))-e.y)*Math.min(1,dt*3);
       e.st=(e.st===undefined?1:e.st)-dt;if(e.st<=0&&P.alive){e.st=1.3;aimShot(e.x-12,e.y,110,0);}}
-    if(P.alive&&P.inv<=0&&Math.hypot(e.x-P.x,e.y-P.y)<e.r+3)playerHit();
+    if(P.alive&&P.inv<=0&&Math.hypot(e.x-P.x,e.y-P.y)<e.r+3)playerHit(e.type==='rock');
   }
   enemies=enemies.filter(e=>e.hp>0&&e.x>-40&&e.x<W+60&&e.y>-40&&e.y<PH+40);
 }
 function aimShot(x,y,spd,off){const a=Math.atan2(P.y-y,P.x-x)+off;eshots.push({x,y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd});
   if(loop2&&state!=='tutorial'){for(const d of [-0.2,0.2])eshots.push({x,y,vx:Math.cos(a+d)*spd*0.9,vy:Math.sin(a+d)*spd*0.9});}}
 function ringShot(x,y,n,spd,off){if(loop2&&state!=='tutorial')n=Math.round(n*1.5);for(let i=0;i<n;i++){const a=off+i*Math.PI*2/n;eshots.push({x,y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd});}}
-function hurtEnemy(e,d){if(e.hp<=0||e.type==='rock')return;e.hp-=d;e.flash=0.08;lastEnemyName=ENEMY_DEF[e.type].name;
+function hurtEnemy(e,d){if(e.hp<=0||e.type==='rock')return;e.hp-=d*(DBG.inv?3:1);e.flash=0.08;lastEnemyName=ENEMY_DEF[e.type].name;
   if(e.hp<=0){kills++;score+=ENEMY_DEF[e.type].score;burst(e.x,e.y,'#fff2a8',12);sfx('boom');
     if(e.type==='puffer'){for(const s of [-1,1])spawn('mini',e.x,e.y,{vx:-50,vy:s*45});}
     if(e.lead||kills%25===0)items.push({x:e.x,y:e.y,t:0,kind:kills%50===0?'B':'P'});}
@@ -633,7 +664,9 @@ function updateShots(dt){
     if(!s.dead&&boss&&!boss.dead&&!boss.core&&bossHitTest(s.x,s.y)){if(boss.kind===2&&!boss.open){s.dead=true;if(Math.random()<0.3){sfx('tink');parts.push({x:s.x,y:s.y,vx:-60,vy:(Math.random()-0.5)*80,t:0,life:0.25,col:'#ffffff',sz:2});}}else{hurtBoss(s.dmg);s.dead=true;}}
     if(!s.dead&&terrainAmp()>0&&(s.y<ceilY(s.x)||s.y>floorY(s.x)))s.dead=true;}
   shots=shots.filter(s=>!s.dead&&s.x<W+10&&s.y>-10&&s.y<PH+10);
-  for(const s of eshots){s.x+=s.vx*dt;s.y+=s.vy*dt;if(P.alive&&P.inv<=0&&Math.hypot(s.x-P.x,s.y-P.y)<3.2){playerHit();s.dead=true;}}
+  for(const s of eshots){
+    if(s.home>0&&P.alive){s.home-=dt;const sp=Math.hypot(s.vx,s.vy),cur=Math.atan2(s.vy,s.vx);let da=Math.atan2(P.y-s.y,P.x-s.x)-cur;while(da>Math.PI)da-=Math.PI*2;while(da<-Math.PI)da+=Math.PI*2;const na=cur+Math.max(-2.4*dt,Math.min(2.4*dt,da));s.vx=Math.cos(na)*sp;s.vy=Math.sin(na)*sp;}
+    s.x+=s.vx*dt;s.y+=s.vy*dt;if(P.alive&&P.inv<=0&&Math.hypot(s.x-P.x,s.y-P.y)<(s.r?s.r+0.8:3.2)){playerHit();s.dead=true;}}
   eshots=eshots.filter(s=>!s.dead&&s.x>-10&&s.x<W+10&&s.y>-10&&s.y<PH+10);
 }
 function updateItems(dt){for(const it of items){it.t+=dt;it.x-=30*dt;it.y+=Math.sin(it.t*3)*12*dt;
@@ -659,6 +692,7 @@ function updateBoss(dt){const B=boss;B.t+=dt;B.flash=Math.max(0,B.flash-dt);
   B.ang+=dt*(B.phase===2?1.2:0.6);
   if(B.kind!==2&&Math.random()<dt*3)parts.push({x:B.x+(Math.random()-0.3)*100,y:B.y+40,vx:-10,vy:-25-Math.random()*20,t:0,life:2,col:'#d8f0ff',sz:3,bub:true});
   if(B.x>W-40)return;
+  if(B.kind!==3&&updateSpecial(B,dt)){if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();return;}
   const m=bossMouth(),bs=ST[stageNo].bspd;
   if(B.kind===1){
     if(B.phase===0){B.y=PH/2+Math.sin(B.t*0.8)*40;B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=2.4;for(const s of [-1,1])spawn('jelly',m.x,m.y+s*16);}
@@ -686,17 +720,58 @@ function updateBoss(dt){const B=boss;B.t+=dt;B.flash=Math.max(0,B.flash-dt);
   }
   if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();
 }
+// ===== ボスの必殺技 =====
+// 体力が2/3を切ると最初の必殺技を出し、以後は一定間隔で繰り返す。発動時に技名のカットインを表示する。
+// 1周目：1面「群体放出」（追尾弾）／2面「真珠螺旋」（殻を開いて渦巻き弾）／3面「フェイタル・レイ」（溜め撃ちビーム）
+// 2周目：1面「改造キャノン」（ビーム＋追尾ミサイル）／2面「双螺旋」（逆回転の二重渦巻き）／3面「ツイン・フェイタルレイ」（ビーム2連射）
+// もう一人のLOLLIPOP：「ミラーバースト」（自機そっくりの弾の連射＋全方位弾）
+const SPECIAL={1:'群体放出',2:'真珠螺旋',3:'フェイタル・レイ',4:'ミラーバースト'};
+const SPECIAL_M={1:'改造キャノン',2:'双螺旋',3:'ツイン・フェイタルレイ',4:'ミラーバースト'};
+let spCut=null;
+function spName(k){return (loop2?SPECIAL_M:SPECIAL)[k];}
+function showSpecial(k){spCut={t:0,name:spName(k),kind:k};sfx('warn');shake=Math.max(shake,0.6);}
+function updateSpecial(B,dt){
+  if(!B.sp){if(B.spCd===undefined)B.spCd=1e9;if(B.phase>=1&&!B.spDone){B.spDone=true;B.spCd=0.6;}
+    B.spCd-=dt;if(B.spCd>0||!P.alive||B.beam||B.dash>0)return false;
+    B.sp={t:0,n:0};showSpecial(B.kind);if(B.kind===2){B.open=true;B.cyc=99;}}
+  const S=B.sp;S.t+=dt;const m=bossMouth();
+  if(S.t<1.0){if(B.kind===2)B.open=true;return true;}
+  if(B.kind===1&&!loop2){
+    if(S.t<3.0){S.e=(S.e||0)-dt;if(S.e<=0){S.e=0.16;const a=Math.PI+(Math.random()-0.5)*1.6;eshots.push({x:m.x,y:m.y,vx:Math.cos(a)*70,vy:Math.sin(a)*70,home:1.3,col:'#ffb0e0',r:3.5});}}
+    else if(S.t>3.4)return endSpecial(B,13);}
+  else if(B.kind===1&&loop2){
+    if(!S.beamed){S.beamed=true;B.beam={t:0.6,y:Math.max(30,Math.min(PH-30,P.y))};sfx('charge');}
+    if(S.t>1.4&&!S.mis){S.mis=true;for(let i=0;i<6;i++){const a=Math.PI+(i-2.5)*0.45;eshots.push({x:B.x-20,y:B.y,vx:Math.cos(a)*85,vy:Math.sin(a)*85,home:1.6,col:'#ffb04a',r:3.5});}}
+    if(!bossBeam(B,dt))return endSpecial(B,12);}
+  else if(B.kind===2){
+    B.open=true;
+    if(S.t<3.6){S.e=(S.e||0)-dt;if(S.e<=0){S.e=loop2?0.07:0.06;const a=S.t*(loop2?4.2:5);const spd=loop2?82:75;
+      eshots.push({x:B.x-10,y:B.y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,col:'#fff0ff',r:3});
+      if(loop2)eshots.push({x:B.x-10,y:B.y,vx:Math.cos(-a+Math.PI)*spd,vy:Math.sin(-a+Math.PI)*spd,col:'#e8d0ff',r:3});}}
+    else{B.cyc=1.2;return endSpecial(B,14);}}
+  else if(B.kind===4){
+    if(S.t<3.0){S.e=(S.e||0)-dt;if(S.e<=0){S.e=0.12;const a=Math.atan2(P.y-m.y,P.x-m.x)+(Math.random()-0.5)*0.25;eshots.push({x:m.x,y:m.y,vx:Math.cos(a)*170,vy:Math.sin(a)*170,col:'#e8ff6a',r:2.5});}}
+    else if(!S.ring){S.ring=true;ringShot(B.x,B.y,24,75,B.ang);}
+    else if(S.t>3.4)return endSpecial(B,12);}
+  return true;}
+function endSpecial(B,cd){B.sp=null;B.spCd=cd;return true;}
+function drawSpecialCut(){
+  if(!spCut)return;const t=spCut.t;if(t>1.3){spCut=null;return;}
+  const k=Math.min(1,t/0.18),o=t>1.05?(t-1.05)/0.25:0,x=(1-k)*W-o*W;const col=spCut.kind===3?'#5ff0ff':spCut.kind===4?'#ffd24a':'#ff6fae';
+  ctx.save();ctx.translate(x,0);ctx.fillStyle='rgba(6,6,20,0.82)';ctx.fillRect(0,92,W,40);ctx.fillStyle=col;ctx.fillRect(0,90,W,2);ctx.fillRect(0,132,W,2);
+  for(let i=0;i<6;i++){ctx.fillStyle='rgba(255,255,255,0.08)';ctx.fillRect(((t*600+i*90)%(W+80))-40,96+i*5,60,1);}
+  txt('必殺',48,108,9,col,'left');txtS(spCut.name,W/2,121,22,'#ffffff','center');ctx.restore();}
 // 溜め撃ちビーム：1.6秒溜め（予告線）→1.7秒照射。照射中は口から左端まで極太の光線
 function bossBeam(B,dt){
   if(B.beam===undefined){B.beam=null;B.beamCd=5;}
-  if(!B.beam){B.beamCd-=dt;if(B.beamCd<=0&&P.alive){B.beam={t:0,y:Math.max(30,Math.min(PH-30,P.y))};sfx('charge');}else return false;}
+  if(!B.beam){B.beamCd-=dt;if(B.beamCd<=0&&P.alive){B.beam={t:0,y:Math.max(30,Math.min(PH-30,P.y))};sfx('charge');if(B.kind===3&&!B.twinNext)showSpecial(3);}else return false;}
   const bm=B.beam;bm.t+=dt;const m=bossMouth();
   B.y+=(bm.y-(m.y-B.y)-B.y)*Math.min(1,dt*4);bm.x=m.x;bm.yy=m.y;
   if(bm.t<1.6){if(Math.random()<0.8)parts.push({x:m.x+(Math.random()-0.5)*60,y:m.y+(Math.random()-0.5)*60,vx:0,vy:0,t:0,life:0.25,col:'#bffcff',sz:2,to:true});
     for(const p of parts)if(p.to){p.vx=(m.x-p.x)*6;p.vy=(m.y-p.y)*6;}}
   else if(bm.t<3.3){if(!bm.fired){bm.fired=true;sfx('beam');shake=Math.max(shake,1.2);}shake=Math.max(shake,0.5);
     if(P.alive&&P.inv<=0&&P.x<m.x&&Math.abs(P.y-m.y)<13)playerHit();}
-  else{B.beam=null;B.beamCd=B.phase===2?6:8.5;return false;}
+  else{B.beam=null;B.beamCd=B.phase===2?6:8.5;if(B.kind===3&&loop2){if(!B.twinNext){B.twinNext=true;B.beamCd=0.35;}else B.twinNext=false;}return false;}
   return true;}
 function drawRam(g){
   if(!boss||!boss.ram)return;const t=boss.ram.t;g.save();g.globalCompositeOperation='lighter';
@@ -710,7 +785,7 @@ function drawBeam(g){
   if(bm.t<1.6){const a=0.3+0.3*Math.sin(bm.t*30);g.fillStyle='rgba(255,80,120,'+a+')';g.fillRect(0,bm.yy-0.5,bm.x,1);
     const r=4+bm.t*8;const gr=g.createRadialGradient(bm.x,bm.yy,0,bm.x,bm.yy,r*2);gr.addColorStop(0,'rgba(255,255,255,0.95)');gr.addColorStop(0.4,'rgba(140,240,255,0.7)');gr.addColorStop(1,'rgba(80,180,255,0)');g.fillStyle=gr;g.beginPath();g.arc(bm.x,bm.yy,r*2,0,Math.PI*2);g.fill();
     if(Math.floor(bm.t*8)%2===0){g.globalCompositeOperation='source-over';g.fillStyle='#ff5a7a';g.font='10px '+FONT;g.textAlign='center';g.fillText('！',bm.x-30,bm.yy-16);}}
-  else{const tt=bm.t-1.6,grow=Math.min(1,tt/0.15),fade=bm.t>3.0?Math.max(0,(3.3-bm.t)/0.3):1,hh=16*grow*fade+Math.sin(bm.t*60)*1.5;
+  else{const tt=bm.t-1.6,grow=Math.min(1,tt/0.15),fade=bm.t>3.0?Math.max(0,(3.3-bm.t)/0.3):1,hh=Math.max(0,16*grow*fade+Math.sin(bm.t*60)*1.5*grow*fade);
     const gr=g.createLinearGradient(0,bm.yy-hh*1.8,0,bm.yy+hh*1.8);gr.addColorStop(0,'rgba(80,160,255,0)');gr.addColorStop(0.3,'rgba(120,220,255,0.7)');gr.addColorStop(0.5,'rgba(255,255,255,1)');gr.addColorStop(0.7,'rgba(120,220,255,0.7)');gr.addColorStop(1,'rgba(80,160,255,0)');
     g.fillStyle=gr;g.fillRect(0,bm.yy-hh*1.8,bm.x,hh*3.6);
     const cg=g.createRadialGradient(bm.x,bm.yy,0,bm.x,bm.yy,hh*2.5);cg.addColorStop(0,'rgba(255,255,255,1)');cg.addColorStop(1,'rgba(120,220,255,0)');g.fillStyle=cg;g.beginPath();g.arc(bm.x,bm.yy,hh*2.5,0,Math.PI*2);g.fill();
@@ -718,6 +793,7 @@ function drawBeam(g){
   g.restore();}
 function updateBoss4(dt){const B=boss;const ratio=B.hp/B.max;B.phase=ratio>0.66?0:ratio>0.33?1:2;B.ang+=dt*0.9;
   if(B.x>W-90&&!B.dash)B.x-=60*dt;
+  if(B.x<W-30&&updateSpecial(B,dt)){if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();return;}
   B.y+=(Math.max(24,Math.min(PH-24,P.y))-B.y)*Math.min(1,dt*(B.phase===2?2.2:1.4));
   const m=bossMouth();
   B.shotT-=dt;if(B.shotT<=0&&P.alive){B.shotT=B.phase===0?0.8:0.6;for(const o of [-0.24,-0.12,0,0.12,0.24])aimShot(m.x,m.y,120,o);}
@@ -725,7 +801,7 @@ function updateBoss4(dt){const B=boss;const ratio=B.hp/B.max;B.phase=ratio>0.66?
     if(B.dash>0){B.dash-=dt;if(B.dash>0.7)B.x+=(Math.max(60,B.dx)-B.x)*Math.min(1,dt*3);else B.x+=((W-90)-B.x)*Math.min(1,dt*3);if(B.dash<=0){B.dash=0;ringShot(B.x,B.y,16,70,B.ang);}}}
   if(B.phase===2){if(bossBeam(B,dt)){if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();return;}B.rT=(B.rT||2)-dt;if(B.rT<=0){B.rT=2.2;ringShot(B.x,B.y,24,60,B.ang*2);}}
   if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();}
-function hurtBoss(d,bomb){const B=boss;if(B.x>W-30||B.dead||B.core)return;if(B.kind===2&&!B.open&&!bomb)return;B.hp-=d;B.flash=0.06;lastEnemyName=bossName(B.kind);
+function hurtBoss(d,bomb){const B=boss;if(B.x>W-30||B.dead||B.core)return;if(B.kind===2&&!B.open&&!bomb)return;B.hp-=d*(DBG.inv?3:1);B.flash=0.06;lastEnemyName=bossName(B.kind);
   if(B.hp<=0){B.hp=0;eshots=[];enemies=[];
     if(B.kind===3&&!loop2){B.core=true;B.coreT=0;B.trueRoute=(continues===0);sfx('big');shake=1.2;flash=0.7;radioQ=[];radio=null;
       if(B.trueRoute){bombs=Math.max(bombs,1);showRadio('maj','LOLLIPOP、敵コアに突入せよ。以上だ。',2.4);showRadio('maj','――待て。突入中止。\nこの機体には、まだ利用価値がある。',4.2);showRadio('maj','ボムで中心核を破壊しろ。',5);}
@@ -791,7 +867,7 @@ function drawBackground(g,scroll,n){
   if(loop2&&!['title','select','sound','boot'].includes(state)){drawBackground1(g,scroll,n);g.save();g.globalCompositeOperation='difference';g.fillStyle='#6a3aa8';g.fillRect(0,0,W,H);g.globalCompositeOperation='source-over';g.fillStyle='rgba(10,0,24,0.3)';g.fillRect(0,0,W,H);g.restore();return;}
   drawBackground1(g,scroll,n);}
 function drawBackground1(g,scroll,n){
-  if(n===1||state==='title'||state==='select'||state==='boot'||state==='sound'){drawSpace(g,scroll);drawSun(g,1);drawPlanet(g,scroll,PH-44,'earth',true);}
+  if(n===1||state==='title'||state==='select'||state==='debug'||state==='boot'||state==='sound'){drawSpace(g,scroll);drawSun(g,1);drawPlanet(g,scroll,PH-44,'earth',true);}
   else if(n===2){drawSpace(g,scroll);drawSun(g,0.8,420,24);drawSmallEarth(g,90,52,16);drawPlanet(g,scroll*1.2,PH-30,'moontex',false,1200);}
   else{drawSpace(g,scroll*1.6,'space3');
     g.save();g.globalAlpha=0.55;g.imageSmoothingEnabled=false;const im=IMG.ship_shadow;
@@ -818,15 +894,15 @@ function drawTerrain(){
 }
 function drawBoss(B){
   const mk=loop2?'_m':'';
-  let im=IMG['boss'+B.kind+((B.kind===4||B.kind===1)?'':mk)];if(B.kind===2&&!B.open)im=IMG['boss2'+mk+'_closed'];if(!im||!im.complete)return;
+  let im=IMG['boss'+B.kind+((B.kind===4||B.kind===1)?'':mk)];if(B.kind===1&&loop2)im=IMG.boss1_x;if(B.kind===2&&!B.open)im=IMG['boss2'+mk+'_closed'];if(!im||!im.complete)return;
   const wob=Math.sin(B.t*2.4)*1.5;const x=Math.round(B.x-im.width/2+(B.kind===1?4:0)),y=Math.round(B.y-im.height/2+wob);
   if(B.core){b.globalAlpha=0.55+0.15*Math.sin(B.t*20);b.drawImage(im,x+Math.round((Math.random()-0.5)*2),y);b.globalAlpha=1;
     const cx=B.x,cy=B.y-14,r=8+3*Math.sin(B.coreT*6);circ(b,cx,cy,r+4,'rgba(120,240,255,0.35)');circ(b,cx,cy,r,'#bffcff');circ(b,cx,cy,r*0.5,'#ffffff');return;}
   if(B.kind===4){for(let i=3;i>0;i--){b.globalAlpha=0.12*i;b.drawImage(im,x+i*10,y);}b.globalAlpha=1;}
   b.drawImage(im,x,y);
   if(B.kind===2&&!B.open){b.strokeStyle='rgba(255,220,255,'+(0.25+0.2*Math.sin(B.t*8))+')';b.lineWidth=1;b.beginPath();b.ellipse(B.x,B.y+4,66,50,0,0,Math.PI*2);b.stroke();}
-  if(B.kind===1&&(B.phase>=1||loop2)){b.strokeStyle='rgba(60,10,40,0.75)';b.lineWidth=1;b.beginPath();b.moveTo(x+60,y+30);b.lineTo(x+70,y+42);b.lineTo(x+66,y+52);b.moveTo(x+70,y+42);b.lineTo(x+82,y+46);if(B.phase===2){b.moveTo(x+40,y+60);b.lineTo(x+52,y+66);b.lineTo(x+50,y+76);}b.stroke();}
-  if(B.kind===1&&B.phase===2){const a=0.35+0.2*Math.sin(B.t*3);b.globalAlpha=a;b.strokeStyle='#3a0a2a';b.lineWidth=1.5;const fx=x+76,fy=y+56;b.beginPath();b.ellipse(fx,fy,15,19,0,0,Math.PI*2);b.stroke();b.fillStyle='#3a0a2a';b.fillRect(fx-8,fy-5,5,2);b.fillRect(fx+3,fy-5,5,2);b.fillRect(fx-1,fy-1,2,6);b.fillRect(fx-5,fy+9,10,1);b.globalAlpha=1;}
+  if(B.kind===1&&!loop2&&B.phase>=1){b.strokeStyle='rgba(60,10,40,0.75)';b.lineWidth=1;b.beginPath();b.moveTo(x+60,y+30);b.lineTo(x+70,y+42);b.lineTo(x+66,y+52);b.moveTo(x+70,y+42);b.lineTo(x+82,y+46);if(B.phase===2){b.moveTo(x+40,y+60);b.lineTo(x+52,y+66);b.lineTo(x+50,y+76);}b.stroke();}
+  if(B.kind===1&&!loop2&&B.phase===2){const a=0.35+0.2*Math.sin(B.t*3);b.globalAlpha=a;b.strokeStyle='#3a0a2a';b.lineWidth=1.5;const fx=x+76,fy=y+56;b.beginPath();b.ellipse(fx,fy,15,19,0,0,Math.PI*2);b.stroke();b.fillStyle='#3a0a2a';b.fillRect(fx-8,fy-5,5,2);b.fillRect(fx+3,fy-5,5,2);b.fillRect(fx-1,fy-1,2,6);b.fillRect(fx-5,fy+9,10,1);b.globalAlpha=1;}
   if(B.kind===3&&B.phase>=1){const a=0.25+0.25*Math.sin(B.t*4);circ(b,B.x,B.y-14,10,'rgba(140,250,255,'+a+')');}
   if(B.flash>0){b.globalCompositeOperation='lighter';b.globalAlpha=0.5;b.drawImage(im,x,y);b.globalAlpha=1;b.globalCompositeOperation='source-over';}
 }
@@ -846,7 +922,7 @@ function drawSprites(){
     for(const s of STARS){const x=Math.round(((s.x-bgScroll*40*s.z)%W+W)%W);b.fillStyle=s.z===3?'rgba(255,255,255,0.8)':'rgba(170,200,255,0.5)';b.fillRect(x,Math.round(s.y),s.z+1,1);}
     drawTerrain();
   }
-  if(state==='title'||state==='select'||state==='sound'||state==='syslog')return;
+  if(state==='title'||state==='select'||state==='debug'||state==='sound'||state==='syslog')return;
   for(const it of items)b.drawImage(it.kind==='P'?SP_ITEM_P:SP_ITEM_B,Math.round(it.x-7),Math.round(it.y-7));
   for(const e of enemies)drawEnemy(e);
   if(boss)drawBoss(boss);
@@ -856,7 +932,7 @@ function drawSprites(){
     else{b.fillStyle='rgba(170,255,80,0.35)';b.fillRect(x-14,y-1,10,3);b.fillStyle='#b8ff4a';b.fillRect(x-7,y-1,12,3);b.fillStyle='#ffffff';b.fillRect(x-3,y,8,1);}}
   for(const p of parts){if(p.bub){b.strokeStyle='rgba(220,240,255,'+(1-p.t/p.life)+')';b.lineWidth=1;b.beginPath();b.arc(Math.round(p.x),Math.round(p.y),2,0,Math.PI*2);b.stroke();}else{b.fillStyle=p.col;b.fillRect(Math.round(p.x),Math.round(p.y),p.sz,p.sz);}}
   drawPlayer();
-  for(const s of eshots){const x=Math.round(s.x),y=Math.round(s.y);circ(b,x,y,4,'#000000');circ(b,x,y,2.5,stageNo===3?'#5ff8ff':'#ff4f8a');b.fillStyle='#ffffff';b.fillRect(x-1,y-1,2,2);}
+  for(const s of eshots){const x=Math.round(s.x),y=Math.round(s.y),r=s.r||2.5;circ(b,x,y,r+1.5,'#000000');circ(b,x,y,r,s.col||(stageNo===3?'#5ff8ff':'#ff4f8a'));b.fillStyle='#ffffff';b.fillRect(x-1,y-1,2,2);}
 }
 function drawBombFX(g){
   if(!bombFX)return;const B=bombFX,t=B.t;g.save();g.globalCompositeOperation='lighter';
@@ -1184,6 +1260,7 @@ function render(isPortrait){
   drawBackground(ctx,bgScroll);
   drawSprites();ctx.imageSmoothingEnabled=false;ctx.drawImage(buf,0,0);drawBeam(ctx);drawRam(ctx);
   drawBombFX(ctx);
+  drawSpecialCut();
   if(flash>0){ctx.fillStyle='rgba(255,255,255,'+(flash*0.75)+')';ctx.fillRect(0,0,W,H);}
   if(boss&&boss.core){ctx.fillStyle='rgba(0,10,20,0.25)';ctx.fillRect(0,0,W,H);}
   ctx.restore();
@@ -1210,11 +1287,20 @@ function render(isPortrait){
     if(sndPlaying){for(let i=0;i<24;i++){const h=4+Math.abs(Math.sin(gT*6+i*0.9))*14*Math.abs(Math.sin(gT*2.3+i));ctx.fillStyle='rgba(255,190,110,0.6)';ctx.fillRect(W/2-96+i*8,H-24-h,5,h);}}
     txt(isTouch?'曲をタップで再生・もう一度で停止':(usePad?'↑↓：選択　A：再生／停止　B：戻る':'↑↓：選択　Enter：再生／停止　Esc：戻る'),W/2,H-6,9,'#9aa6cc','center');
     return;}
+  if(state==='debug'){
+    ctx.fillStyle='rgba(20,2,8,0.78)';ctx.fillRect(0,0,W,H);
+    txtS('DEBUG MENU',W/2,40,18,'#ff9a9a','center');txt('テスト用の隠しメニュー（無敵・倍速の設定は保存されません）',W/2,56,9,'#c8d0ec','center');
+    const it=dbgItems();
+    for(let i=0;i<it.length;i++){const y=84+i*18,on=i===dbgIdx;if(on){ctx.fillStyle='rgba(255,120,120,0.18)';ctx.fillRect(110,y-13,260,17);ctx.strokeStyle='#ff9a9a';ctx.lineWidth=1;ctx.strokeRect(110.5,y-12.5,259,16);}
+      const val=it[i][1];txt((on?'▶ ':'　')+val,124,y,12,/ON$/.test(val)?'#ffe08a':(on?'#ffffff':'#c8d0ec'));}
+    txt(isTouch?'選んだ項目をもう一度タップで決定':(usePad?'↑↓：選択　A：決定　B：戻る':'↑↓：選択　Enter/Z：決定　Esc：戻る'),W/2,H-10,9,'#9aa6cc','center');
+    if(titleMsg){ctx.globalAlpha=Math.min(1,(3-titleMsg.t)*2);box(W/2-120,8,240,22,'rgba(8,12,40,0.92)','#f0c86a');txt(titleMsg.text,W/2,23,11,'#f0c86a','center');ctx.globalAlpha=1;}
+    return;}
   if(state==='select'){
     ctx.fillStyle='rgba(2,4,20,0.6)';ctx.fillRect(0,0,W,H);
-    txtS('STAGE SELECT',W/2,34,18,'#ffe6c8','center');txt('デバッグ用：全ステージ選択可能',W/2,50,9,'#f0c86a','center');
-    for(let i=0;i<SEL.length;i++){const y=74+i*20,on=i===selIdx;if(on){ctx.fillStyle='rgba(255,180,110,0.18)';ctx.fillRect(90,y-14,300,19);ctx.strokeStyle='#ffb26a';ctx.lineWidth=1;ctx.strokeRect(90.5,y-13.5,299,18);}
-      txt((on?'▶ ':'　')+SEL[i],104,y,12,on?'#ffffff':'#b4bedc');}
+    txtS('STAGE SELECT',W/2,28,16,'#ffe6c8','center');txt('デバッグ用：1・2周目の全ステージ・全ボス',W/2,42,9,'#f0c86a','center');
+    for(let i=0;i<SEL.length;i++){const y=62+i*13,on=i===selIdx;if(on){ctx.fillStyle='rgba(255,180,110,0.18)';ctx.fillRect(90,y-11,300,13);ctx.strokeStyle='#ffb26a';ctx.lineWidth=1;ctx.strokeRect(90.5,y-10.5,299,12);}
+      txt((on?'▶ ':'　')+SEL[i],104,y,10,on?'#ffffff':(i>=8?'#f0c8a0':'#b4bedc'));}
     txt(isTouch?'選んだ項目をもう一度タップで決定':(usePad?'↑↓：選択　A：決定　B：戻る':'↑↓：選択　Enter/Z：決定　Esc：戻る'),W/2,H-10,9,'#9aa6cc','center');
     return;}
   if(state==='talk'){drawTalk();return;}
