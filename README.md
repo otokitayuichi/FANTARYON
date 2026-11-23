@@ -12,7 +12,8 @@ ottoky studio の横スクロールシューティング（Fantasy × Beyond × 
 
 | パス | 内容 |
 |---|---|
-| `public/index.html` | ゲーム本体（1ファイル完結。画像・BGMを埋め込み済み） |
+| `public/index.html` | ゲーム本体（プログラム） |
+| `public/assets/` | 画像（png/jpg）・BGM（mp3） |
 | `wrangler.jsonc` | Cloudflare Workers の静的アセット配信設定 |
 | `package.json` / `capacitor.config.json` | Android版（Capacitor）の設定 |
 | `android-overrides/` | Android版の差し替えファイル（全画面化のMainActivity、固定のデバッグ署名鍵、アプリアイコン） |

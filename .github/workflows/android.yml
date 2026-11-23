@@ -4,6 +4,7 @@
 #  - 横画面固定（sensorLandscape）、全画面表示（MainActivityを差し替え）
 #  - アプリアイコンは android-overrides/res の画像（濃紺の背景＋自機LOLLIPOP）に差し替える
 #  - 署名は固定のデバッグ鍵（android-overrides/debug.keystore）で行い、上書きインストールできるようにする
+#  - versionCodeはビルド番号（github.run_number）で毎回増やし、versionNameはpackage.jsonのversionを使う（アンインストール不要で更新できる）
 #  - 完成したAPKはReleases「android-latest」に固定ファイル名 fantaryon.apk で公開する（毎回置き換え）
 #  - Android SDKはランナーに標準搭載のものを使う（setup-androidは使わない：ライセンス取得で失敗するため）
 name: Android APK
@@ -45,6 +46,13 @@ jobs:
 
       - name: Androidプロジェクトの生成
         run: npx cap add android
+
+      - name: バージョン番号の設定（毎ビルドで自動採番）
+        run: |
+          VN=$(node -p "require('./package.json').version")
+          sed -i -E "s/versionCode [0-9]+/versionCode ${{ github.run_number }}/" android/app/build.gradle
+          sed -i -E "s/versionName \"[^\"]*\"/versionName \"${VN}\"/" android/app/build.gradle
+          grep -E "versionCode|versionName" android/app/build.gradle
 
       - name: 横画面固定・全画面・署名鍵の設定
         run: |
