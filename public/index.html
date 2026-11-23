@@ -74,7 +74,7 @@
  ポーズ    : Esc/P または右上のボタンで一時停止。「ゲームを再開」「タイトルへ戻る」を選べる。
  操作      : スマホ  左側＝アナログスティック、右側＝長押しでショット、BOMB／換装ボタン、右上＝一時停止
              キーボード 矢印/WASD＝移動、Shift＝低速、Z/Space/J＝ショット、X/K＝ボム、C＝換装（3面）、
-                        Enter/Z＝決定・会話送り、S＝会話スキップ、Q＝チュートリアルスキップ（SはWASDの下移動と重なるため）、Esc/P＝一時停止
+                        Enter/Z＝決定・会話送り、Q＝スキップ（オープニング・会話・チュートリアル・エンディング共通。SはWASDの下移動のため使わない）、Esc/P＝一時停止
              マウス  クリック長押し＝ショット
              ゲームパッド 十字キー/左スティック＝移動（スティックはアナログ）、A/RT＝ショット・決定、B＝ボム・戻る、
                         X/Y＝換装（3面）、LB/RB/LT＝低速、BACK＝会話スキップ、START＝一時停止。
@@ -217,7 +217,7 @@ addEventListener('keyup',e=>{keys[e.code]=false;});
 // LB/RB/LT＝低速、BACK＝会話スキップ、START＝一時停止。被弾とボムで振動（対応パッド・ブラウザのみ）。
 let usePad=false;const padAxis={x:0,y:0,on:false};const padPrev={};
 const PAD_MAP=[[0,['KeyZ']],[1,['KeyX','Backspace']],[2,['KeyC']],[3,['KeyC']],[4,['ShiftLeft','PadLB']],[5,['ShiftLeft','PadRB']],[6,['ShiftLeft']],[7,['KeyZ']],
-  [8,['KeyS','PadBack']],[9,['Escape']],[12,['ArrowUp']],[13,['ArrowDown']],[14,['ArrowLeft']],[15,['ArrowRight']]];
+  [8,['PadBack']],[9,['Escape']],[12,['ArrowUp']],[13,['ArrowDown']],[14,['ArrowLeft']],[15,['ArrowRight']]];
 function pollPad(){if(!navigator.getGamepads)return;let gps;try{gps=navigator.getGamepads();}catch(_){return;}
   const now={};let any=false;padAxis.on=false;
   for(const gp of gps){if(!gp||!gp.connected)continue;
@@ -425,7 +425,7 @@ const RIFT_LINES=[[0.8,'maj','LOLLIPOP、月の裏側に到達。\n前方に時�
 function updateRift(dt){bgScroll+=dt;
   if(!riftDone&&stateT>17.6){riftDone=true;sfx('whoosh');}
   if(stateT>19.6&&!updateRift.f){updateRift.f=true;sfx('flash');}
-  if(stateT>RIFT_LEN||(stateT>0.8&&(pressed.KeyS||pressed.Escape||anyTap()))){updateRift.f=false;beginStage(1);}
+  if(stateT>RIFT_LEN||(stateT>0.8&&(pressed.KeyQ||pressed.PadBack||pressed.Escape||anyTap()))){updateRift.f=false;beginStage(1);}
   tapQueue=[];}
 function drawRift(){
   const t=stateT;ui();ctx.imageSmoothingEnabled=true;drawSpace(ctx,t*6);
@@ -451,7 +451,7 @@ function drawRift(){
     for(let i=0;i<14;i++){ctx.fillStyle='rgba(220,200,255,0.25)';ctx.fillRect(0,Math.random()*H,W,1+Math.random()*4);}
     if(k<0.3){ctx.fillStyle='rgba(255,255,255,'+(1-k/0.3)+')';ctx.fillRect(0,0,W,H);}}
   if(t>=21.6){ctx.fillStyle='#05020e';ctx.fillRect(0,0,W,H);const a=Math.min(1,(t-21.6)*2);ctx.globalAlpha=a;txtS('2ND MISSION',W/2,H/2-6,26,'#ffe6c8','center');txt('― ANOTHER TIME ―',W/2,H/2+18,12,'#c8a0ff','center');ctx.globalAlpha=1;}
-  txt(isTouch?'タップでスキップ':(usePad?'A / BACK：スキップ':'Enter / S：スキップ'),W-8,H-8,9,'rgba(200,208,236,0.7)','right');}
+  txt(isTouch?'タップでスキップ':(usePad?'A / BACK：スキップ':'Enter / Q：スキップ'),W-8,H-8,9,'rgba(200,208,236,0.7)','right');}
 function startEnding(t){endType=t;stopMusic();playMusic('final');if(t==='true'&&!unlocked2){unlocked2=true;sv('fantaryon_loop2','1');}setState('ending');}
 function withTutorial(next){if(tutDone)next();else startTutorial(next);}
 
@@ -523,10 +523,10 @@ function update(dt){
   if(state==='boot'){bgScroll+=dt;if(anyTap()){initAudio();playMusic('ready');OP_CUES.forEach(q=>q[2]=false);setState('opening');}return;}
   if(state==='opening'){bgScroll+=dt;
     for(const q of OP_CUES){if(!q[2]&&stateT>q[0]){q[2]=true;sfx(q[1]);}}
-    if(stateT>OP_LEN||(stateT>0.5&&(anyTap()||pressed.KeyS||pressed.Escape))){setState('title');}return;}
+    if(stateT>OP_LEN||(stateT>0.5&&(anyTap()||pressed.KeyQ||pressed.PadBack||pressed.Escape))){setState('title');}return;}
   if(state==='title'){bgScroll+=dt;if(curName!=='ready')playMusic('ready');
     const items=titleItems();titleIdx=Math.min(titleIdx,items.length-1);
-    if(keys.PadLB&&keys.PadRB&&pressed.KeyS){sfx('item');dbgIdx=0;dbgConfirm=false;setState('debug');return;}
+    if(keys.PadLB&&keys.PadRB&&pressed.PadBack){sfx('item');dbgIdx=0;dbgConfirm=false;setState('debug');return;}
     for(const t of tapQueue){const g=toGame(t.x,t.y);if(g.y>50&&g.y<116&&g.x>W/2-150&&g.x<W/2+150){if(gT-logoTap.t>1.2)logoTap.n=0;logoTap.n++;logoTap.t=gT;
       if(logoTap.n>=7){logoTap.n=0;tapQueue=[];sfx('item');dbgIdx=0;dbgConfirm=false;setState('debug');return;}}}
     if(stateT>0.3){titleIdx=menuNav(items.length,titleIdx);
@@ -566,7 +566,7 @@ function update(dt){
   if(state==='talk'){bgScroll+=dt*0.5;
     const L=talk.lines[talk.i][1];const before=Math.floor(talk.chars);talk.chars=Math.min(L.length,talk.chars+dt*26);if(Math.floor(talk.chars)>before&&Math.floor(talk.chars)%2===0)sfx('talk');
     for(const t of tapQueue){const g=toGame(t.x,t.y);if(g.x>W-70&&g.y<30){talk.i=talk.lines.length-1;talk.chars=999;}}
-    if(pressed.KeyS||pressed.Escape){talk.i=talk.lines.length-1;talk.chars=999;talkAdvance();tapQueue=[];return;}
+    if(pressed.KeyQ||pressed.PadBack||pressed.Escape){talk.i=talk.lines.length-1;talk.chars=999;talkAdvance();tapQueue=[];return;}
     if(anyTap())talkAdvance();tapQueue=[];return;}
   if(state==='stageclear'){bgScroll+=dt;if(stateT>4||(stateT>1.2&&anyTap()))afterClear();tapQueue=[];return;}
   if(state==='gameover'){
@@ -981,7 +981,7 @@ function drawTalk(){
   txt(c.name,106,190,12,c.col);
   const shown=l[1].slice(0,Math.floor(talk.chars)).split('\n');shown.forEach((s,i)=>txt(s,106,212+i*20,13,'#e8eaf2'));
   if(talk.chars>=l[1].length&&Math.floor(gT*2)%2)txt('▼',isTouch?W-24:W-110,254,10,'#f0c86a');
-  box(W-62,8,54,20,'rgba(8,12,40,0.8)','#8a94c4');txt(isTouch?'SKIP':(usePad?'BACK:SKIP':'S:SKIP'),W-35,22,usePad?8:10,'#c8d0ec','center');
+  box(W-62,8,54,20,'rgba(8,12,40,0.8)','#8a94c4');txt(isTouch?'SKIP':(usePad?'BACK:SKIP':'Q:SKIP'),W-35,22,usePad?8:10,'#c8d0ec','center');
   if(!isTouch)txt((usePad?'A：次へ':'Enter / Z：次へ'),W-18,254,9,'#9aa6cc','right');
 }
 function drawControls(){
@@ -1132,7 +1132,7 @@ function drawOpening(){
   }else{const tt=t-OPV.len;drawBackground(ctx,tt,1);
     const z=Math.max(1,3.2-tt*3.5);ctx.save();ctx.translate(W/2,104);ctx.scale(z,z);ctx.globalAlpha=Math.min(1,tt*2.5);txtS('FANTARYON',0,8,46,'#ffe6c8','center');ctx.restore();ctx.globalAlpha=1;
     ctx.fillStyle='rgba(255,255,255,'+Math.max(0,1-tt*1.4)+')';ctx.fillRect(0,0,W,H);}
-  txt(isTouch?'タップでスキップ':(usePad?'BACK / START：スキップ':'Enter / S：スキップ'),W-8,20,9,'rgba(200,208,236,0.7)','right');
+  txt(isTouch?'タップでスキップ':(usePad?'BACK / START：スキップ':'Enter / Q：スキップ'),W-8,20,9,'rgba(200,208,236,0.7)','right');
 }
 function lerpCol(a,b,f){return 'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*f)).join(',')+')';}
 
@@ -1142,7 +1142,7 @@ const END_LEN={normal:24,true:28,loop2:31};
 const END_MARKS={normal:[2.6,8.4,14.6,20.4],true:[2,7,13,17,21,23.5],loop2:[2,6,11,15,20,25.5]};
 function updateEnding(dt){bgScroll+=dt*0.4;
   if(endType==='true'){if(stateT>18&&!updateEnding.lock){updateEnding.lock=true;sfx('lock');}}
-  if(stateT>END_LEN[endType]||(stateT>2&&(pressed.KeyS||pressed.Escape))){updateEnding.lock=false;credT=0;setState('credits');}
+  if(stateT>END_LEN[endType]||(stateT>2&&(pressed.KeyQ||pressed.PadBack||pressed.Escape))){updateEnding.lock=false;credT=0;setState('credits');}
   else if(stateT>1&&anyTap()){const nx=END_MARKS[endType].find(m=>m>stateT+0.05);if(nx)stateT=nx;else{updateEnding.lock=false;credT=0;setState('credits');}}
   tapQueue=[];}
 function drawHangar(g,t){
@@ -1191,7 +1191,7 @@ function drawEnding(){
     if(t<2){ctx.fillStyle='rgba(255,255,255,'+Math.max(0,1-t/2)+')';ctx.fillRect(0,0,W,H);}
     if(t>25.5){ctx.fillStyle='rgba(0,0,0,'+Math.min(1,(t-25.5)*1.5)+')';ctx.fillRect(0,0,W,H);const a=Math.min(1,(t-26)*1.5);ctx.globalAlpha=Math.max(0,a);txtS('2ND MISSION COMPLETE',W/2,H/2-4,20,'#ffe6c8','center');txt('― TRUE END ―',W/2,H/2+20,12,'#f0c86a','center');ctx.globalAlpha=1;}
   }
-  txt(isTouch?'タップで次へ':(usePad?'A：次へ　BACK：スキップ':'Enter：次へ　S：スキップ'),W-8,22,9,'rgba(200,208,236,0.7)','right');
+  txt(isTouch?'タップで次へ':(usePad?'A：次へ　BACK：スキップ':'Enter：次へ　Q：スキップ'),W-8,22,9,'rgba(200,208,236,0.7)','right');
 }
 // ===== スタッフロール・結果 =====
 let credT=0;
