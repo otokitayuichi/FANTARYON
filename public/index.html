@@ -54,7 +54,8 @@
              ・コンティニューあり：少佐の突入命令 → ボスに体当たり → 自爆演出（約3.6秒：操作不可、
                機体が赤く明滅 →「自爆シーケンス起動」→ 白い爆発が画面を覆う） → 通常エンディング
              ・コンティニューなし：突入命令の直後に少佐が中止を命じ、ボムでコアを破壊 → 真エンディング
-               （この流れでは体当たりは無効。ボムが0の場合は1発補給する）
+               （この流れでは体当たりは無効。ボムが0の場合は1発補給し、軍曹の無線「ボムを1発転送した！」で知らせる。
+               指示前にボムを使って0になった場合も補給し直すので、ボム切れで詰むことはない）
  真エンディング条件 : 一度もコンティニューせずにラスボスを倒すこと（被弾・ミスは条件に含まない）。
  タイトルメニュー : ゲームスタート（→1面から。初回はチュートリアル）／2ND MISSION（解放後のみ）／あそびかた／サウンドトラック
  隠しデバッグメニュー : タイトルで「630」とキー入力／タイトルロゴを7回連続タップ／ゲームパッドのLB＋RBを押しながらBACK で開く。
@@ -312,7 +313,7 @@ const RADIO={
 };
 const RADIO_M={
   1:[[6,'maj','別時空に突入。計器が安定しない。\n注意しろ。'],[18,'pop','空の色が違う……\nここ、本当に俺たちの宇宙か？'],[40,'sgt','ポップ、浮いてる破片は壊せねえ。\n避けろよ！'],[66,'pop','この敵……\n前に倒したやつらと同じ……？'],[70.5,'maj','こちら側の同類だ。迷うな。']],
-  2:[[6,'echo','……また来たんだね、ポップ。'],[10.5,'pop','誰だ……！'],[34,'sgt','通路が狭え。落ち着いていけ。'],[60,'pop','少佐。……この前、俺、\n少佐に照準を……。'],[64.5,'maj','……知っている。今は飛べ。']],
+  2:[[6,'echo','……また来たんだね、ポップ。'],[10.5,'pop','誰だ……！'],[34,'sgt','通路が狭え。落ち着いていけ。']],
   3:[[6,'pop','ここは……外宇宙の、向こう側か。'],[24,'sgt','ポップ。何があっても、\n俺はお前の整備士だ。'],[28.5,'pop','……はい。'],[56,'echo','僕は、この先で待ってるよ。']],
 };
 const BOSS_RADIO={1:[['pop','でけえ……！',2.4],['maj','大型反応を確認。迎撃しろ。']],2:[['echo','……ポップ……こっちへ……',3],['maj','前方に空間の歪み。\n目標と断定、撃破しろ。']],3:[['maj','中心核を確認。\n全兵装の使用を許可する。']]};
@@ -466,12 +467,14 @@ const TUT_TEXT=[
 function startTutorial(next){resetField();loop2=false;stageNo=1;form='L';lives=3;life=MAX_LIFE;bombs=3;P.inv=1e9;P.x=120;
   tut={step:0,t:0,moved:0,next,lx:P.x,ly:P.y};setState('tutorial');playMusic('ready');}
 function tutNextStep(){tut.step++;tut.t=0;sfx('decide');
-  if(tut.step===1){for(const y of [48,98,148])spawn('target',380,y);}  // 会話ウィンドウ（PH-64より下）に重ならない高さ
+  if(tut.step===1){for(const y of [48,98,148])spawn('target',380,y);}
+  if(tut.step===2)tut.bombed=false;  // ボムの練習より前に撃ったボムは数えない  // 会話ウィンドウ（PH-64より下）に重ならない高さ
   if(tut.step>=TUT_TEXT.length){tutDone=true;sv('fantaryon_tut','1');const n=tut.next;tut=null;resetField();n();}}
 function updateTutorial(dt){tut.t+=dt;bgScroll+=dt*0.6;
   if(pressed.KeyQ||pressed.PadBack||tapQueue.some(t=>{const g=toGame(t.x,t.y);return g.x>W-70&&g.y<30;})){tut.step=TUT_TEXT.length-1;tutNextStep();return;}
   updatePlayer(dt);P.inv=1e9;tut.moved+=Math.hypot(P.x-tut.lx,P.y-tut.ly);tut.lx=P.x;tut.ly=P.y;
   updateEnemies(dt);updateShots(dt);updateBomb(dt);
+  flash=Math.max(0,flash-dt*1.6);shake=Math.max(0,shake-dt*2.2);  // ボムの白い光と揺れを本編と同じ速さで消す
   for(const p of parts){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;}parts=parts.filter(p=>p.t<p.life);
   const st=tut.step;
   if(st===0&&tut.moved>180&&tut.t>1)tutNextStep();
@@ -677,6 +680,9 @@ function burst(x,y,col,n){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s
 // ===== ボス =====
 function bossHitTest(x,y){const B=boss;let cx=B.x+4,cy=B.y,rx=58,ry=36;if(B.kind===2){cx=B.x;cy=B.y+4;rx=62;ry=46;}else if(B.kind===3){cx=B.x;cy=B.y-14;rx=66;ry=38;}else if(B.kind===4){cx=B.x;cy=B.y;rx=46;ry=22;}const dx=(x-cx)/rx,dy=(y-cy)/ry;return dx*dx+dy*dy<1;}
 function bossMouth(){const B=boss;if(B.kind===1)return{x:B.x-56,y:B.y+6};if(B.kind===2)return{x:B.x-48,y:B.y};if(B.kind===4)return{x:B.x-48,y:B.y};return{x:B.x-50,y:B.y-12};}
+// ボスの上下移動：移動用の時計（B.mt）は動いている間だけ進め、目標位置へなめらかに寄せる。
+// 必殺技・溜め撃ちで止まった後や、体力の段階が変わって動き方が切り替わった時に瞬間移動しないため。
+function bossY(B,dt,ty){B.mt=(B.mt||0)+dt;B.y+=(ty-B.y)*Math.min(1,dt*2.5);}
 function updateBoss(dt){const B=boss;B.t+=dt;B.flash=Math.max(0,B.flash-dt);
   if(B.dead){B.deadT+=dt;if(Math.random()<0.6)burst(B.x+(Math.random()-0.5)*110,B.y+(Math.random()-0.5)*70,Math.random()<0.5?'#ff9ec8':'#fff2a8',6);
     if(Math.random()<0.15)sfx('boom');
@@ -695,14 +701,14 @@ function updateBoss(dt){const B=boss;B.t+=dt;B.flash=Math.max(0,B.flash-dt);
   if(B.kind!==3&&updateSpecial(B,dt)){if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();return;}
   const m=bossMouth(),bs=ST[stageNo].bspd;
   if(B.kind===1){
-    if(B.phase===0){B.y=PH/2+Math.sin(B.t*0.8)*40;B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=2.4;for(const s of [-1,1])spawn('jelly',m.x,m.y+s*16);}
+    if(B.phase===0){bossY(B,dt,PH/2+Math.sin((B.mt||0)*0.8)*40);B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=2.4;for(const s of [-1,1])spawn('jelly',m.x,m.y+s*16);}
       B.shotT-=dt;if(B.shotT<=0&&P.alive){B.shotT=1.4;for(const o of [-0.25,0,0.25])aimShot(m.x,m.y,95,o);}}
-    else if(B.phase===1){B.y=PH/2+Math.sin(B.t*1.1)*58;B.shotT-=dt;if(B.shotT<=0){B.shotT=1.3;ringShot(B.x,B.y,16,70,B.ang);}
+    else if(B.phase===1){bossY(B,dt,PH/2+Math.sin((B.mt||0)*1.1)*58);B.shotT-=dt;if(B.shotT<=0){B.shotT=1.3;ringShot(B.x,B.y,16,70,B.ang);}
       B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=3;spawn('flower',m.x,m.y,{wait:0.3});}}
-    else{B.y=PH/2+Math.sin(B.t*0.6)*30;B.shotT-=dt;if(B.shotT<=0){B.shotT=0.12;const a=B.ang*3;for(const o of [0,Math.PI])eshots.push({x:B.x,y:B.y,vx:Math.cos(a+o)*65,vy:Math.sin(a+o)*65});}
+    else{bossY(B,dt,PH/2+Math.sin((B.mt||0)*0.6)*30);B.shotT-=dt;if(B.shotT<=0){B.shotT=0.12;const a=B.ang*3;for(const o of [0,Math.PI])eshots.push({x:B.x,y:B.y,vx:Math.cos(a+o)*65,vy:Math.sin(a+o)*65});}
       B.spawnT-=dt;if(B.spawnT<=0&&P.alive){B.spawnT=1.8;aimShot(m.x,m.y,110,0);}}
   }else if(B.kind===2){
-    B.y=PH/2+Math.sin(B.t*0.7)*(B.phase===2?50:30);
+    bossY(B,dt,PH/2+Math.sin((B.mt||0)*0.7)*(B.phase===2?50:30));
     B.cyc-=dt;
     if(B.cyc<=0){B.open=!B.open;B.cyc=B.open?(B.phase===2?4.2:3.2):(B.phase===2?1.4:2.2);
       if(B.open){ringShot(m.x,m.y,B.phase===0?14:20,70*bs,B.ang);const want=B.phase===0?1:2;const have=enemies.filter(e=>e.type==='shadow').length;for(let i=have;i<want;i++)spawn('shadow',B.x-30,B.y,{idx:i});}}
@@ -710,7 +716,7 @@ function updateBoss(dt){const B=boss;B.t+=dt;B.flash=Math.max(0,B.flash-dt);
     else{B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=1.1;ringShot(B.x,B.y,8,55,B.ang*2);}}
   }else{
     if(bossBeam(B,dt)){if(P.alive&&P.inv<=0&&bossHitTest(P.x,P.y))playerHit();return;}
-    B.y=PH/2+Math.sin(B.t*0.5)*36;
+    bossY(B,dt,PH/2+Math.sin((B.mt||0)*0.5)*36);
     if(B.phase===0){B.shotT-=dt;if(B.shotT<=0&&P.alive){B.shotT=1.4;for(const o of [-0.3,-0.15,0,0.15,0.3])aimShot(m.x,m.y,95*bs,o);}
       B.spawnT-=dt;if(B.spawnT<=0){B.spawnT=0.18;const tx2=B.x-50+Math.random()*100;eshots.push({x:tx2,y:B.y+40,vx:-70-Math.random()*30,vy:(Math.random()<0.5?-1:1)*(20+Math.random()*40)});}}
     else if(B.phase===1){B.shotT-=dt;if(B.shotT<=0){B.shotT=0.1;const a=B.ang*2.6;for(const o of [0,Math.PI*2/3,Math.PI*4/3])eshots.push({x:B.x,y:B.y-14,vx:Math.cos(a+o)*70,vy:Math.sin(a+o)*70});}
@@ -804,7 +810,8 @@ function updateBoss4(dt){const B=boss;const ratio=B.hp/B.max;B.phase=ratio>0.66?
 function hurtBoss(d,bomb){const B=boss;if(B.x>W-30||B.dead||B.core)return;if(B.kind===2&&!B.open&&!bomb)return;B.hp-=d*(DBG.inv?3:1);B.flash=0.06;lastEnemyName=bossName(B.kind);
   if(B.hp<=0){B.hp=0;eshots=[];enemies=[];
     if(B.kind===3&&!loop2){B.core=true;B.coreT=0;B.trueRoute=(continues===0);sfx('big');shake=1.2;flash=0.7;radioQ=[];radio=null;
-      if(B.trueRoute){bombs=Math.max(bombs,1);showRadio('maj','LOLLIPOP、敵コアに突入せよ。以上だ。',2.4);showRadio('maj','――待て。突入中止。\nこの機体には、まだ利用価値がある。',4.2);showRadio('maj','ボムで中心核を破壊しろ。',5);}
+      if(B.trueRoute){const supply=bombs<1;bombs=Math.max(bombs,1);showRadio('maj','LOLLIPOP、敵コアに突入せよ。以上だ。',2.4);showRadio('maj','――待て。突入中止。\nこの機体には、まだ利用価値がある。',4.2);
+        if(supply)showRadio('sgt','ボムを1発転送した！ そいつで決めろ！',3.6);showRadio('maj','ボムで中心核を破壊しろ。',5);}
       else{showRadio('maj','LOLLIPOP、敵コアに突入せよ。以上だ。');showRadio('pop','了解。');showRadio('sgt','……ポップ。');}
       return;}
     B.dead=true;score+=20000*B.kind;sfx('big');shake=1.5;flash=0.8;}}
@@ -816,6 +823,7 @@ function updateCore(dt){const B=boss;B.coreT+=dt;eshots=[];
   if(B.trueRoute){
     if(B.killT!==undefined){B.killT+=dt;if(Math.random()<0.7)burst(cx+(Math.random()-0.5)*120,cy+(Math.random()-0.5)*80,Math.random()<0.5?'#bffcff':'#fff2a8',8);if(Math.random()<0.2)sfx('boom');
       if(B.killT>2.8){B.dead=true;shots=[];fadeMusic(1.5);startTalk('trueEnd',()=>startEnding('true'));}return;}
+    if(bombs<1&&!bombFX){bombs=1;showRadio('sgt','ボムを再転送した！ 撃て！',2.4);}  // 指示前に撃って0になっても詰まないよう補給し直す
     if(B.coreT>2.4&&bombFX&&bombFX.t<0.5){B.killT=0;sfx('big');flash=1;shake=2;}
     return;}
   if(B.ram){const r=B.ram;r.t+=dt;P.x+=((cx-26)-P.x)*Math.min(1,dt*3);P.y+=(cy-P.y)*Math.min(1,dt*3);shake=Math.max(shake,0.3+r.t*0.3);
@@ -967,7 +975,7 @@ function drawHUD(){
   if(boss&&!boss.dead&&!boss.core){ctx.fillStyle='#1a0a18';ctx.fillRect(264,8,208,6);ctx.fillStyle=boss.kind===3?'#5ff0ff':boss.kind===4?'#ffd24a':'#ff6fae';ctx.fillRect(264,8,208*boss.hp/boss.max,6);ctx.strokeStyle='#ffd0e4';ctx.lineWidth=1;ctx.strokeRect(264.5,8.5,207,5);txtS(bossName(boss.kind),472,25,9,'#ffd0e4','right');}
   if(boss&&boss.ram&&boss.ram.t<1.9&&Math.floor(gT*6)%2===0){txtS('― 自爆シーケンス起動 ―',W/2,PH-40,14,'#ff6a5a','center');}
   if(boss&&boss.core&&!boss.ram&&boss.killT===undefined&&Math.floor(gT*3)%2===0){
-    if(boss.trueRoute){if(boss.coreT>2.4)txtS(isTouch?'▶ BOMBボタンでコアを破壊せよ':'▶ ボム（X）でコアを破壊せよ',W/2,PH-40,13,'#ffe6a0','center');}
+    if(boss.trueRoute){if(boss.coreT>2.4)txtS(isTouch?'▶ BOMBボタンでコアを破壊せよ':(usePad?'▶ ボム（Bボタン）でコアを破壊せよ':'▶ ボム（X）でコアを破壊せよ'),W/2,PH-40,13,'#ffe6a0','center');}
     else if(boss.coreT>2)txtS('▶ ボスに体当たりしてコアへ突入せよ',W/2,PH-40,13,'#bffcff','center');}
 }
 function drawRadio(){if(!radio)return;const a=Math.min(1,radio.t*5,(radio.d-radio.t)*4);ctx.globalAlpha=Math.max(0,a);
@@ -1208,7 +1216,7 @@ function drawCredits(){ui();drawSpace(ctx,bgScroll,endType==='true'?'space':'spa
     txt('SCORE',150,100,12,'#9aa6cc');txt(String(score).padStart(7,'0'),330,100,14,'#e6e9f4','right');
     txt('被弾',150,124,12,'#9aa6cc');txt(hits+' 回',330,124,13,'#e6e9f4','right');
     txt('コンティニュー',150,148,12,'#9aa6cc');txt(continues+' 回',330,148,13,'#e6e9f4','right');
-    txt('エンディング',150,172,12,'#9aa6cc');txt(endType==='loop2'?'2ND MISSION COMPLETE':endType==='true'?'TRUE END':'NORMAL END',330,172,13,endType!=='normal'?'#f0c86a':'#c8d6ff','right');
+    txt('エンディング',150,172,12,'#9aa6cc');txt(endType==='loop2'?'ANOTHER END':endType==='true'?'TRUE END':'NORMAL END',330,172,13,endType!=='normal'?'#f0c86a':'#c8d6ff','right');
     if(endType==='normal')txt('真エンディング条件：一度もコンティニューせずにラスボスを倒す',W/2,202,10,'#9aa6cc','center');
     if(endType==='true')txt('タイトルに「2ND MISSION」が追加されました',W/2,202,10,'#f0c86a','center');
     if(t>35.5&&Math.floor(gT*1.6)%2===0)txt(isTouch?'タップでタイトルへ':(usePad?'Aボタンでタイトルへ':'Enterキーでタイトルへ'),W/2,236,12,'#e6e9f4','center');
