@@ -1,3 +1,5 @@
 node_modules/
 android/
 fantaryon.apk
+desktop/app/
+desktop/dist/

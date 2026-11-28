@@ -1,8 +1,8 @@
 {
   "name": "fantaryon",
   "private": true,
-  "version": "0.9.6",
-  "description": "FANTARYON - ottoky studio（Android版はCapacitorでpublic/をアプリ化）",
+  "version": "1.0.0",
+  "description": "FANTARYON - ROMEOTTO（Android版はCapacitor、Windows版はElectron（desktop/）でpublic/をアプリ化）",
   "devDependencies": {
     "@capacitor/android": "8.6.2",
     "@capacitor/cli": "8.6.2",

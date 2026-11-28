@@ -1,0 +1,66 @@
+# FANTARYON Windows版（exe）自動ビルド
+# 仕様：
+#  - mainへのpush（public/・desktop/ などの変更時）または手動実行で、public/ をElectronでWindowsアプリ化してexeを作る
+#  - 形式はインストール不要のポータブル版（ダブルクリックで起動）。コード署名はしない
+#  - バージョンはリポジトリ直下 package.json の version を desktop/package.json に反映する
+#  - 完成したexeはReleases「windows-latest」に固定ファイル名 fantaryon.exe で公開する（毎回置き換え）
+#  - Android版のReleases「android-latest」を「最新」に保つため、こちらは --latest=false で公開する
+name: Windows EXE
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/**'
+      - 'desktop/**'
+      - 'package.json'
+      - '.github/workflows/windows.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: ゲーム本体のコピーとバージョン反映
+        shell: bash
+        run: |
+          rm -rf desktop/app
+          cp -r public desktop/app
+          VN=$(node -p "require('./package.json').version")
+          node -e "const f='desktop/package.json';const p=require('./'+f);p.version='${VN}';require('fs').writeFileSync(f,JSON.stringify(p,null,2))"
+          echo "version ${VN}"
+
+      - name: 依存パッケージのインストール
+        working-directory: desktop
+        run: npm install
+
+      - name: exeのビルド
+        working-directory: desktop
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npx electron-builder --win portable --x64 --publish never
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fantaryon-exe
+          path: desktop/dist/fantaryon.exe
+
+      - name: Releasesに公開（固定URL）
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete windows-latest --yes --cleanup-tag || true
+          gh release create windows-latest desktop/dist/fantaryon.exe \
+            --title "FANTARYON Windows（最新ビルド）" \
+            --notes "mainブランチの最新版から自動ビルドしたWindows版（インストール不要・ダブルクリックで起動）です。" \
+            --latest=false
