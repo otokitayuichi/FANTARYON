@@ -1,7 +1,7 @@
 {
   "name": "fantaryon",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "FANTARYON - ROMEOTTO（Android版はCapacitor、Windows版はTauri（src-tauri/）でpublic/をアプリ化）",
   "devDependencies": {
     "@capacitor/android": "8.6.2",

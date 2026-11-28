@@ -4,7 +4,7 @@
 // 制作 : ROMEOTTO（ゲーム おとっきー × 音楽 Romeo Hijo）
 // 概要 : public/ をexeに埋め込み、WebView2で起動する
 // 仕様 :
-//  - 起動時は全画面（tauri.conf.json の fullscreen）
+//  - 起動時はウィンドウ（1280×720）。ゲーム側のブラウザ全画面要求もexeでは行わない
 //  - F11 / Alt+Enter の全画面切り替えはゲーム側（index.html）で行う
 //  - 終了は Alt+F4
 //  - 実行時にコンソール窓は出さない

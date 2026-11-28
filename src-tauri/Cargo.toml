@@ -2,7 +2,7 @@
 # 仕様：public/ のゲームをexeに埋め込み、Windows標準のWebView2で動かす（Electronより大幅に小さい）
 [package]
 name = "fantaryon"
-version = "1.0.0"
+version = "1.0.1"
 description = "FANTARYON - ROMEOTTO"
 authors = ["ROMEOTTO"]
 edition = "2021"

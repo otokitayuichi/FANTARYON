@@ -2,10 +2,10 @@
 # 仕様：
 #  - mainへのpush（public/・src-tauri/ などの変更時）または手動実行で、public/ をTauriでWindowsアプリ化してexeを作る
 #  - ゲーム本体はexeに埋め込む（インストール不要・展開処理なし・1ファイル）。表示はWindows標準のWebView2を使う
-#  - 起動時は全画面。F11 / Alt+Enter で切り替え、Alt+F4 で終了
+#  - 起動時はウィンドウ（1280×720）。F11 / Alt+Enter で全画面に切り替え、Alt+F4 で終了
 #  - バージョンはリポジトリ直下 package.json の version を使う（tauri.conf.json から参照）
 #  - GitHubの実行環境で一時的な通信エラーが起きるため、ビルドは失敗時に最大5回やり直す
-#  - 完成したexeはReleases「windows-latest」に固定ファイル名 fantaryon.exe で公開する（毎回置き換え）
+#  - 完成したexeはReleases「windows-latest」に固定ファイル名 fantaryon.exe と、itch用zip fantaryon_windows.zip（中身 FANTARYON.exe）で公開する（毎回置き換え）
 #  - Android版のReleases「android-latest」を「最新」に保つため、こちらは --latest=false で公開する
 #  - コード署名はしない
 name: Windows EXE
@@ -51,17 +51,21 @@ jobs:
           done
           exit 1
 
-      - name: exeの名前をそろえる
-        shell: bash
+      - name: exeの名前をそろえ、itch用のzipも作る
+        shell: pwsh
         run: |
-          mkdir -p out
-          cp src-tauri/target/release/fantaryon.exe out/fantaryon.exe
-          ls -la out
+          New-Item -ItemType Directory -Force out, out/zip | Out-Null
+          Copy-Item src-tauri/target/release/fantaryon.exe out/fantaryon.exe
+          Copy-Item src-tauri/target/release/fantaryon.exe out/zip/FANTARYON.exe
+          Compress-Archive -Path out/zip/FANTARYON.exe -DestinationPath out/fantaryon_windows.zip -Force
+          Get-ChildItem out
 
       - uses: actions/upload-artifact@v4
         with:
           name: fantaryon-exe
-          path: out/fantaryon.exe
+          path: |
+            out/fantaryon.exe
+            out/fantaryon_windows.zip
 
       - name: Releasesに公開（固定URL）
         shell: bash
@@ -69,7 +73,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release delete windows-latest --yes --cleanup-tag || true
-          gh release create windows-latest out/fantaryon.exe \
+          gh release create windows-latest out/fantaryon.exe out/fantaryon_windows.zip \
             --title "FANTARYON Windows（最新ビルド）" \
-            --notes "mainブランチの最新版から自動ビルドしたWindows版です。インストール不要、ダブルクリックで起動（起動時は全画面。F11 / Alt+Enter で切り替え、Alt+F4 で終了）。Windows 10/11 標準のWebView2で動作します。" \
+            --notes "mainブランチの最新版から自動ビルドしたWindows版です。インストール不要、ダブルクリックで起動（ウィンドウで起動。F11 / Alt+Enter で全画面に切り替え）。Windows 10/11 標準のWebView2で動作します。" \
             --latest=false

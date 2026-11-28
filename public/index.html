@@ -8,7 +8,9 @@
  音楽      : Romeo Hijo（Delusion sound track 01）
  スタッフ  : 制作 ROMEOTTO／ゲーム制作 おとっきー／シナリオ おとっきー・Romeo Hijo／
              デザイン おとっきー／キャラクター Romeo Hijo／音楽 Romeo Hijo
- 版        : 1.0.0（2026-11-28）正式版。制作表記をROMEOTTOに統一（起動ロゴ・タイトル・クレジット）、Windows版（exe・Tauri、起動時は全画面、F11/Alt+Enterで切替）を追加、
+ 版        : 1.0.1（2026-11-28）初回起動時に言語選択（日本語／English）を表示（選択は保存、タイトルのLANGUAGEで変更可）、
+             Windows版をTauri化（約12MB）、ウィンドウで起動（F11/Alt+Enterで全画面）
+             1.0.0（2026-11-28）正式版。制作表記をROMEOTTOに統一（起動ロゴ・タイトル・クレジット）、Windows版（exe）を追加、
              フォント（DotGothic16）を同梱してオフラインでもドット文字で表示
              0.9.6（2026-11-27）英語対応（ブラウザの言語で自動判定、?lang=en|ja、タイトルのLANGUAGEで切替・保存）、
              スマホでエンドロールの長押し早送りが効かない不具合を修正
@@ -146,9 +148,11 @@ function wrapEN(s,px,size){if(LANG!=='en'||!s)return s;ctx.font=size+'px '+FONT;
 // Windows版（Tauri）専用：F11 / Alt+Enter で全画面⇔ウィンドウを切り替える（Web・Androidでは何もしない）
 if(window.__TAURI__&&window.__TAURI__.window){addEventListener('keydown',e=>{if(e.key==='F11'||(e.key==='Enter'&&e.altKey)){e.preventDefault();e.stopImmediatePropagation();if(e.repeat)return;
   try{const w=window.__TAURI__.window.getCurrentWindow();w.isFullscreen().then(f=>w.setFullscreen(!f)).catch(()=>{});}catch(_){}}},true);}
+// 言語を一度でも選んだか（URLの?lang=指定・保存済みの選択があれば選択済み）。未選択なら起動直後に言語選択画面を出す
+let LANG_SET=(()=>{try{const q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='ja')return true;const v=localStorage.getItem('fantaryon_lang');return v==='en'||v==='ja';}catch(_){return false;}})(),langIdx=0;
 function setLang(l){LANG=l;sv('fantaryon_lang',l);_trC.clear();try{document.documentElement.lang=l;}catch(_){}}
 
-const VERSION='1.0.0';
+const VERSION='1.0.1';
 
 // ===== 画面 =====
 const W=480,H=270,HUD=18,PH=H-HUD;
@@ -296,7 +300,7 @@ function endPtr(e){if(e.pointerId===stick.id){stick.id=null;stick.dx=0;stick.dy=
 cv.addEventListener('pointerup',endPtr);cv.addEventListener('pointercancel',endPtr);
 function toGame(x,y){return{x:(x-ox)/sc,y:(y-oy)/sc};}
 function goFull(){
-  if(isIOS)return;const el=document.documentElement;
+  if(isIOS||window.__TAURI__)return;const el=document.documentElement; // Windows版（exe）はウィンドウのまま起動する（全画面はF11/Alt+Enter）
   try{const p=(el.requestFullscreen||el.webkitRequestFullscreen).call(el,{navigationUI:'hide'});if(p&&p.then)p.then(()=>{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('landscape').catch(()=>{});}).catch(()=>{});}catch(e){}
 }
 
@@ -331,6 +335,7 @@ const TALK={
 function startTalk(key,next){talk={lines:TALK[key].map(l=>[l[0],wrapEN(tr(l[1]),356,13)].concat(l.slice(2))),i:0,chars:0};nextAfterTalk=next;setState('talk');}
 function talkAdvance(){const L=talk.lines[talk.i][1];if(talk.chars<L.length){talk.chars=L.length;return;}talk.i++;talk.chars=0;if(talk.i>=talk.lines.length){nextAfterTalk();}}
 function setState(s){state=s;stateT=0;tapQueue=[];pressed={};}
+function startOpening(){playMusic('ready');OP_CUES.forEach(q=>q[2]=false);setState('opening');}
 function showRadio(who,text,d){radioQ.push({who,text:wrapEN(tr(text),204,10),d:d||4.2});}
 
 // ===== ステージ定義 =====
@@ -560,7 +565,9 @@ function menuTap(n,y0,step,x0,x1){for(const t of tapQueue){const g=toGame(t.x,t.
 function decideKey(){return pressed.Enter||pressed.NumpadEnter||pressed.KeyZ||pressed.Space||pressed.KeyJ;}
 function update(dt){
   gT+=dt;stateT+=dt;if(titleMsg){titleMsg.t+=dt;if(titleMsg.t>3)titleMsg=null;}if(spCut)spCut.t+=dt;
-  if(state==='boot'){bgScroll+=dt;if(anyTap()){initAudio();playMusic('ready');OP_CUES.forEach(q=>q[2]=false);setState('opening');}return;}
+  if(state==='boot'){bgScroll+=dt;if(anyTap()){initAudio();if(LANG_SET)startOpening();else{langIdx=LANG==='en'?1:0;setState('langsel');}}return;}
+  if(state==='langsel'){bgScroll+=dt;if(stateT<0.25){tapQueue=[];return;}langIdx=menuNav(2,langIdx);const ti=menuTap(2,150,26,W/2-90,W/2+90);let go=-1;if(ti>=0)go=ti;else if(decideKey())go=langIdx;
+    if(go>=0){sfx('decide');setLang(go===1?'en':'ja');LANG_SET=true;startOpening();}return;}
   if(state==='opening'){bgScroll+=dt;
     for(const q of OP_CUES){if(!q[2]&&stateT>q[0]){q[2]=true;sfx(q[1]);}}
     if(stateT>OP_LEN||(stateT>0.5&&(anyTap()||pressed.KeyQ||pressed.PadBack||pressed.Escape))){setState('title');}return;}
@@ -1381,6 +1388,12 @@ function render(isPortrait){
   if(isPortrait){ctx.setTransform(dpr,0,0,dpr,0,0);txt('端末を横向きにしてください',cw/2,ch/2,18,'#e6e9f4','center','middle');txt('このゲームは横画面専用です',cw/2,ch/2+30,14,'#9aa6cc','center','middle');return;}
   if(state==='boot'){ui();ctx.fillStyle='#0b1236';ctx.fillRect(0,0,W,H);ctx.imageSmoothingEnabled=true;if(IMG.logo.complete)ctx.drawImage(IMG.logo,W/2-150,40,300,150);
     if(Math.floor(gT*1.6)%2===0)txt(isTouch?'画面をタップしてください':(usePad?'Aボタンでスタート':'クリック または Enterキーでスタート'),W/2,226,13,'#e6e9f4','center');txt('音が出ます',W/2,246,9,'#9aa6cc','center');return;}
+  if(state==='langsel'){ui();ctx.fillStyle='#0b1236';ctx.fillRect(0,0,W,H);ctx.imageSmoothingEnabled=true;if(IMG.logo.complete)ctx.drawImage(IMG.logo,W/2-80,14,160,80);
+    const raw=(t,x,y,sz,col)=>{ctx.font=sz+'px '+FONT;ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.fillStyle=col;ctx.fillText(t,x,y);};
+    raw('言語を選んでください',W/2,114,11,'#c8d0ec');raw('Select your language',W/2,128,10,'#9aa6cc');
+    ['日本語','English'].forEach((t,i)=>{const y=150+i*26,on=i===langIdx;ctx.fillStyle=on?'rgba(255,180,110,0.2)':'rgba(255,255,255,0.04)';ctx.fillRect(W/2-90,y-15,180,20);ctx.strokeStyle=on?'#ffb26a':'#3a4680';ctx.lineWidth=1;ctx.strokeRect(W/2-89.5,y-14.5,179,19);raw((on?'▶ ':'')+t,W/2,y,13,on?'#ffffff':'#c8d0ec');});
+    raw(isTouch?'タップで決定 / Tap to choose':(usePad?'↑↓  A：決定 / Select & press A':'↑↓  Enter：決定 / Select & press Enter'),W/2,212,9,'#b4bedc');
+    raw('タイトル画面の LANGUAGE でいつでも変更できます / You can change it later from LANGUAGE on the title screen',W/2,256,7,'#7c88b0');return;}
   if(state==='opening'){clipGame();drawOpening();ctx.restore();return;}
   if(state==='ending'){clipGame();drawEnding();ctx.restore();return;}
   if(state==='rift'){clipGame();drawRift();ctx.restore();return;}

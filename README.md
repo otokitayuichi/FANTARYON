@@ -39,8 +39,9 @@ ROMEOTTO の横スクロールシューティング（Fantasy × Beyond × Orion
 - Tauriで作成。ゲーム本体をexeに埋め込み、Windows標準のWebView2で動かす（1ファイル・約10MB・インストール不要）
 - mainへpushすると GitHub Actions が自動でexeをビルドし、Releases に公開する
 - ダウンロードURL（固定）：https://github.com/otokitayuichi/FANTARYON/releases/download/windows-latest/fantaryon.exe
+- itch用zip（固定）：https://github.com/otokitayuichi/FANTARYON/releases/download/windows-latest/fantaryon_windows.zip
 - 手動で作り直す場合：Actions →「Windows EXE」→「Run workflow」
-- 起動時は全画面。F11 または Alt+Enter で切り替え、Alt+F4 で終了
+- 起動時はウィンドウ（1280×720）。F11 または Alt+Enter で全画面に切り替え
 - コード署名なしのため、初回起動時にSmartScreenの警告が出る（「詳細情報」→「実行」で起動）
 
 ## 更新方法
@@ -49,7 +50,7 @@ ROMEOTTO の横スクロールシューティング（Fantasy × Beyond × Orion
 
 ## 現在の版
 
-ver 1.0.0（正式版）
+ver 1.0.1（正式版）
 
 - 日本語・英語に対応（自動判定／?lang=en／タイトルのLANGUAGEで切替）
 - Web・Android（APK）・Windows（exe）で配布
