@@ -1,0 +1,21 @@
+# FANTARYON Windows版（Tauri）
+# 仕様：public/ のゲームをexeに埋め込み、Windows標準のWebView2で動かす（Electronより大幅に小さい）
+[package]
+name = "fantaryon"
+version = "1.0.0"
+description = "FANTARYON - ROMEOTTO"
+authors = ["ROMEOTTO"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"

@@ -1,0 +1,10 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "ゲーム画面に許可する操作：全画面の取得と切り替えのみ",
+  "windows": ["main"],
+  "permissions": [
+    "core:window:allow-is-fullscreen",
+    "core:window:allow-set-fullscreen"
+  ]
+}

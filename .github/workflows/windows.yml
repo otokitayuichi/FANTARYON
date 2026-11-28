@@ -1,10 +1,13 @@
 # FANTARYON Windows版（exe）自動ビルド
 # 仕様：
-#  - mainへのpush（public/・desktop/ などの変更時）または手動実行で、public/ をElectronでWindowsアプリ化してexeを作る
-#  - 形式はインストール不要のポータブル版（ダブルクリックで起動）。コード署名はしない
-#  - バージョンはリポジトリ直下 package.json の version を desktop/package.json に反映する
+#  - mainへのpush（public/・src-tauri/ などの変更時）または手動実行で、public/ をTauriでWindowsアプリ化してexeを作る
+#  - ゲーム本体はexeに埋め込む（インストール不要・展開処理なし・1ファイル）。表示はWindows標準のWebView2を使う
+#  - 起動時は全画面。F11 / Alt+Enter で切り替え、Alt+F4 で終了
+#  - バージョンはリポジトリ直下 package.json の version を使う（tauri.conf.json から参照）
+#  - GitHubの実行環境で一時的な通信エラーが起きるため、ビルドは失敗時に最大5回やり直す
 #  - 完成したexeはReleases「windows-latest」に固定ファイル名 fantaryon.exe で公開する（毎回置き換え）
 #  - Android版のReleases「android-latest」を「最新」に保つため、こちらは --latest=false で公開する
+#  - コード署名はしない
 name: Windows EXE
 
 on:
@@ -12,7 +15,7 @@ on:
     branches: [main]
     paths:
       - 'public/**'
-      - 'desktop/**'
+      - 'src-tauri/**'
       - 'package.json'
       - '.github/workflows/windows.yml'
   workflow_dispatch:
@@ -25,34 +28,40 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - name: ゲーム本体のコピーとバージョン反映
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: exeのビルド（通信失敗時は最大5回やり直す）
+        shell: bash
+        working-directory: src-tauri
+        run: |
+          for i in 1 2 3 4 5; do
+            npx --yes @tauri-apps/cli@2 build --no-bundle && test -f target/release/fantaryon.exe && exit 0
+            echo "ビルド失敗（${i}回目）。20秒後にやり直します"; sleep 20
+          done
+          exit 1
+
+      - name: exeの名前をそろえる
         shell: bash
         run: |
-          rm -rf desktop/app
-          cp -r public desktop/app
-          VN=$(node -p "require('./package.json').version")
-          node -e "const f='desktop/package.json';const p=require('./'+f);p.version='${VN}';require('fs').writeFileSync(f,JSON.stringify(p,null,2))"
-          echo "version ${VN}"
-
-      - name: 依存パッケージのインストール
-        working-directory: desktop
-        run: npm install
-
-      - name: exeのビルド
-        working-directory: desktop
-        env:
-          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
-        run: npx electron-builder --win portable --x64 --publish never
+          mkdir -p out
+          cp src-tauri/target/release/fantaryon.exe out/fantaryon.exe
+          ls -la out
 
       - uses: actions/upload-artifact@v4
         with:
           name: fantaryon-exe
-          path: desktop/dist/fantaryon.exe
+          path: out/fantaryon.exe
 
       - name: Releasesに公開（固定URL）
         shell: bash
@@ -60,7 +69,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release delete windows-latest --yes --cleanup-tag || true
-          gh release create windows-latest desktop/dist/fantaryon.exe \
+          gh release create windows-latest out/fantaryon.exe \
             --title "FANTARYON Windows（最新ビルド）" \
-            --notes "mainブランチの最新版から自動ビルドしたWindows版（インストール不要・ダブルクリックで起動）です。" \
+            --notes "mainブランチの最新版から自動ビルドしたWindows版です。インストール不要、ダブルクリックで起動（起動時は全画面。F11 / Alt+Enter で切り替え、Alt+F4 で終了）。Windows 10/11 標準のWebView2で動作します。" \
             --latest=false

@@ -18,7 +18,7 @@ ROMEOTTO の横スクロールシューティング（Fantasy × Beyond × Orion
 | `package.json` / `capacitor.config.json` | Android版（Capacitor）の設定 |
 | `android-overrides/` | Android版の差し替えファイル（全画面化のMainActivity、固定のデバッグ署名鍵、アプリアイコン） |
 | `.github/workflows/android.yml` | APKの自動ビルドとReleasesへの公開 |
-| `desktop/` | Windows版（Electron）のメインプロセスと設定・アイコン |
+| `src-tauri/` | Windows版（Tauri）の設定・起動処理・アイコン |
 | `.github/workflows/windows.yml` | exeの自動ビルドとReleasesへの公開 |
 
 ## 公開（Cloudflare Workers）
@@ -36,10 +36,11 @@ ROMEOTTO の横スクロールシューティング（Fantasy × Beyond × Orion
 
 ## Windows版（exe）
 
-- mainへpushすると GitHub Actions が自動でexe（インストール不要のポータブル版）をビルドし、Releases に公開する
+- Tauriで作成。ゲーム本体をexeに埋め込み、Windows標準のWebView2で動かす（1ファイル・約10MB・インストール不要）
+- mainへpushすると GitHub Actions が自動でexeをビルドし、Releases に公開する
 - ダウンロードURL（固定）：https://github.com/otokitayuichi/FANTARYON/releases/download/windows-latest/fantaryon.exe
 - 手動で作り直す場合：Actions →「Windows EXE」→「Run workflow」
-- 全画面切り替え：F11 または Alt+Enter
+- 起動時は全画面。F11 または Alt+Enter で切り替え、Alt+F4 で終了
 - コード署名なしのため、初回起動時にSmartScreenの警告が出る（「詳細情報」→「実行」で起動）
 
 ## 更新方法

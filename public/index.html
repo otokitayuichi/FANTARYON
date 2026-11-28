@@ -8,7 +8,7 @@
  音楽      : Romeo Hijo（Delusion sound track 01）
  スタッフ  : 制作 ROMEOTTO／ゲーム制作 おとっきー／シナリオ おとっきー・Romeo Hijo／
              デザイン おとっきー／キャラクター Romeo Hijo／音楽 Romeo Hijo
- 版        : 1.0.0（2026-11-28）正式版。制作表記をROMEOTTOに統一（起動ロゴ・タイトル・クレジット）、Windows版（exe）を追加、
+ 版        : 1.0.0（2026-11-28）正式版。制作表記をROMEOTTOに統一（起動ロゴ・タイトル・クレジット）、Windows版（exe・Tauri、起動時は全画面、F11/Alt+Enterで切替）を追加、
              フォント（DotGothic16）を同梱してオフラインでもドット文字で表示
              0.9.6（2026-11-27）英語対応（ブラウザの言語で自動判定、?lang=en|ja、タイトルのLANGUAGEで切替・保存）、
              スマホでエンドロールの長押し早送りが効かない不具合を修正
@@ -143,6 +143,9 @@ function tr(s){if(LANG!=='en'||typeof s!=='string'||!/[^\x00-\x7f]/.test(s))retu
 // 英語の長い文を、指定の幅(px)に収まるよう単語単位で改行する（日本語はそのまま）
 function wrapEN(s,px,size){if(LANG!=='en'||!s)return s;ctx.font=size+'px '+FONT;
   return s.split('\n').map(p=>{const w=p.split(' ');const out=[];let cur='';for(const x of w){const t=cur?cur+' '+x:x;if(cur&&ctx.measureText(t).width>px){out.push(cur);cur=x;}else cur=t;}out.push(cur);return out.join('\n');}).join('\n');}
+// Windows版（Tauri）専用：F11 / Alt+Enter で全画面⇔ウィンドウを切り替える（Web・Androidでは何もしない）
+if(window.__TAURI__&&window.__TAURI__.window){addEventListener('keydown',e=>{if(e.key==='F11'||(e.key==='Enter'&&e.altKey)){e.preventDefault();e.stopImmediatePropagation();if(e.repeat)return;
+  try{const w=window.__TAURI__.window.getCurrentWindow();w.isFullscreen().then(f=>w.setFullscreen(!f)).catch(()=>{});}catch(_){}}},true);}
 function setLang(l){LANG=l;sv('fantaryon_lang',l);_trC.clear();try{document.documentElement.lang=l;}catch(_){}}
 
 const VERSION='1.0.0';
